@@ -39,8 +39,8 @@ body { background-color: #fff9f5; color: #1a1a1a; }
 
 body {
   font-family: 'Nunito', Arial, sans-serif;
-  background: #fff9f5; background: var(--bg);
-  color: #1a1a1a; color: var(--text);
+  background: #fff9f5; background-color: #fff9f5;
+  color: #1a1a1a; color: #1a1a1a;
   min-height: 100vh;
 }
 
@@ -59,13 +59,13 @@ header {
 .logo {
   font-family: 'Fredoka One', 'Arial Black', Impact, cursive;
   font-size: 1.8rem;
-  color: var(--yellow);
+  color: #f7c948;
   letter-spacing: 1px;
   text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
 }
-.logo span { color: var(--orange); }
+.logo span { color: #ff6b35; }
 .header-badge {
-  background: var(--orange);
+  background: #ff6b35;
   color: #fff;
   font-family: 'Fredoka One', 'Arial Black', Impact, cursive;
   font-size: 0.75rem;
@@ -76,6 +76,7 @@ header {
 
 /* ── HERO ── */
 .hero {
+  background-color: #ff6b35;
   background: linear-gradient(135deg, #ff6b35 0%, #f7c948 50%, #ff9f1c 100%);
   background-size: 200% 200%;
   animation: gradShift 5s ease infinite;
@@ -121,12 +122,12 @@ header {
   align-items: center;
   gap: 8px;
   background: #fff;
-  color: var(--orange-dark);
+  color: #c94f00;
   font-family: 'Fredoka One', 'Arial Black', Impact, cursive;
   font-size: 1.1rem;
   padding: 0.5rem 1.4rem;
   border-radius: 50px;
-  box-shadow: 0 6px 0 var(--yellow-dark);
+  box-shadow: 0 6px 0 #e0a800;
   animation: bounce 2s ease-in-out infinite;
 }
 @keyframes bounce {
@@ -159,8 +160,8 @@ header {
   margin: 1.5rem 0 0.75rem;
 }
 .stat-card {
-  background: #ffffff; background: var(--card);
-  border: 1px solid var(--border);
+  background: #ffffff; background-color: #ffffff;
+  border: 1px solid rgba(0,0,0,0.1);
   border-radius: 14px;
   padding: 0.85rem 0.5rem;
   text-align: center;
@@ -169,18 +170,18 @@ header {
 .stat-val {
   font-family: 'Fredoka One', 'Arial Black', Impact, cursive;
   font-size: 1.6rem;
-  color: var(--orange);
+  color: #ff6b35;
 }
 .stat-label {
   font-size: 10px;
-  color: var(--muted);
+  color: #666666;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-top: 2px;
 }
 .progress-wrap {
-  background: var(--surface);
+  background-color: #f5f0eb;
   border-radius: 20px;
   height: 16px;
   overflow: hidden;
@@ -188,7 +189,7 @@ header {
 }
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--orange), var(--yellow));
+  background: linear-gradient(90deg, #ff6b35, #f7c948);
   border-radius: 20px;
   width: 0;
   animation: growBar 2s ease forwards;
@@ -196,7 +197,7 @@ header {
 @keyframes growBar { to { width: 62%; } }
 .progress-label {
   font-size: 12px;
-  color: var(--muted);
+  color: #666666;
   font-weight: 700;
   text-align: right;
 }
@@ -211,7 +212,7 @@ header {
 }
 .countdown-title {
   font-family: 'Fredoka One', 'Arial Black', Impact, cursive;
-  color: var(--yellow);
+  color: #f7c948;
   font-size: 0.95rem;
   margin-bottom: 0.85rem;
 }
@@ -229,7 +230,7 @@ header {
 .cd-num {
   font-family: 'Fredoka One', 'Arial Black', Impact, cursive;
   font-size: 1.8rem;
-  color: var(--yellow);
+  color: #f7c948;
   line-height: 1;
 }
 .cd-lbl {
@@ -242,8 +243,8 @@ header {
 
 /* ── SECTION CARD ── */
 .card {
-  background: #ffffff; background: var(--card);
-  border: 1px solid var(--border);
+  background: #ffffff; background-color: #ffffff;
+  border: 1px solid rgba(0,0,0,0.1);
   border-radius: 18px;
   padding: 1.35rem;
   margin: 1.25rem 0;
@@ -252,7 +253,7 @@ header {
 .card-title {
   font-family: 'Fredoka One', 'Arial Black', Impact, cursive;
   font-size: 1.2rem;
-  color: #1a1a1a; color: var(--text);
+  color: #1a1a1a; color: #1a1a1a;
   margin-bottom: 0.85rem;
 }
 
@@ -263,7 +264,7 @@ header {
   gap: 10px;
 }
 .t-opt {
-  border: 2.5px solid var(--orange);
+  border: 2.5px solid #ff6b35;
   border-radius: 14px;
   padding: 0.7rem 0.4rem;
   text-align: center;
@@ -273,15 +274,17 @@ header {
   background: #fff;
 }
 .t-opt:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(255,107,53,0.25); }
-.t-opt.selected { background: var(--orange); color: #fff; transform: translateY(-2px); box-shadow: 0 4px 16px rgba(255,107,53,0.4); }
-.t-opt.selected .t-save { background: var(--yellow); color: #7a4f00; }
-.t-count { font-family: 'Fredoka One', 'Arial Black', Impact, cursive; font-size: 1.4rem; color: inherit; }
-.t-label { font-size: 10px; font-weight: 700; color: var(--muted); margin: 1px 0; }
-.t-opt.selected .t-label { color: rgba(255,255,255,0.8); }
-.t-price { font-size: 12px; font-weight: 800; color: inherit; }
+.t-opt.selected { background-color: #ff6b35 !important; color: #ffffff !important; transform: translateY(-2px); box-shadow: 0 4px 16px rgba(255,107,53,0.4); border-color: #ff6b35 !important; }
+.t-opt.selected .t-count { color: #ffffff !important; }
+.t-opt.selected .t-price { color: #ffffff !important; }
+.t-opt.selected .t-label { color: rgba(255,255,255,0.85) !important; }
+.t-opt.selected .t-save { background-color: #f7c948 !important; color: #7a4f00 !important; }
+.t-count { font-family: 'Fredoka One', 'Arial Black', Impact, cursive; font-size: 1.4rem; color: #ff6b35; }
+.t-label { font-size: 10px; font-weight: 700; color: #666666; margin: 1px 0; }
+.t-price { font-size: 12px; font-weight: 800; color: #1a1a1a; }
 .t-save {
   display: inline-block;
-  background: var(--yellow);
+  background-color: #f7c948;
   color: #7a4f00;
   font-size: 9px;
   font-weight: 800;
@@ -296,87 +299,92 @@ header {
   flex: 1;
   padding: 0.65rem;
   border-radius: 12px;
-  border: 2px solid var(--border);
+  border: 2px solid rgba(0,0,0,0.1);
   text-align: center;
   cursor: pointer;
   font-weight: 700;
   font-size: 13px;
-  color: var(--muted);
+  color: #666666;
   transition: all 0.15s;
-  background: var(--surface);
+  background-color: #f5f0eb;
 }
-.momo-tab.active { border-color: var(--orange); color: var(--orange); background: rgba(255,107,53,0.06); }
+.momo-tab.active { border-color: #ff6b35; color: #ff6b35; background: rgba(255,107,53,0.06); }
 .momo-tab .tab-icon { font-size: 22px; display: block; margin-bottom: 2px; }
 
 /* ── FORM ── */
 .field { margin-bottom: 12px; }
-.field label { font-size: 13px; font-weight: 700; color: var(--muted); display: block; margin-bottom: 5px; }
+.field label { font-size: 13px; font-weight: 700; color: #666666; display: block; margin-bottom: 5px; }
 .field input {
   width: 100%;
-  border: 1.5px solid var(--border);
+  border: 1.5px solid rgba(0,0,0,0.1);
   border-radius: 12px;
   padding: 0.7rem 1rem;
   font-size: 15px;
   font-family: 'Nunito', Arial, sans-serif;
-  background: var(--surface);
-  color: #1a1a1a; color: var(--text);
+  background-color: #f5f0eb;
+  color: #1a1a1a; color: #1a1a1a;
   outline: none;
   transition: border-color 0.15s;
 }
-.field input:focus { border-color: var(--orange); background: #fff; }
+.field input:focus { border-color: #ff6b35; background: #fff; }
 
 /* ── SUMMARY ── */
 .summary {
   background: rgba(255,107,53,0.07);
-  border: 1.5px dashed var(--orange);
+  border: 1.5px dashed #ff6b35;
   border-radius: 14px;
   padding: 1rem;
   margin: 1rem 0;
 }
-.sum-row { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; color: var(--muted); padding: 3px 0; }
-.sum-total { display: flex; justify-content: space-between; font-family: 'Fredoka One', 'Arial Black', Impact, cursive; font-size: 1.15rem; color: var(--orange-dark); border-top: 1.5px dashed rgba(255,107,53,0.3); padding-top: 8px; margin-top: 6px; }
+.sum-row { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; color: #666666; padding: 3px 0; }
+.sum-total { display: flex; justify-content: space-between; font-family: 'Fredoka One', 'Arial Black', Impact, cursive; font-size: 1.15rem; color: #c94f00; border-top: 1.5px dashed rgba(255,107,53,0.3); padding-top: 8px; margin-top: 6px; }
 
 /* ── BUTTONS ── */
 .btn-main {
   width: 100%;
-  background: linear-gradient(135deg, var(--orange), var(--yellow));
-  color: #fff;
+  background: #ff6b35;
+  background: linear-gradient(135deg, #ff6b35, #f7c948);
+  color: #ffffff !important;
   font-family: 'Fredoka One', 'Arial Black', Impact, cursive;
   font-size: 1.2rem;
   border: none;
   border-radius: 16px;
   padding: 1.05rem;
   cursor: pointer;
-  box-shadow: 0 5px 0 var(--orange-dark);
+  box-shadow: 0 5px 0 #c94f00;
   transition: all 0.15s;
   letter-spacing: 0.5px;
+  display: block;
+  text-align: center;
+  -webkit-appearance: none;
 }
-.btn-main:hover { transform: translateY(-2px); box-shadow: 0 7px 0 var(--orange-dark); }
-.btn-main:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--orange-dark); }
+.btn-main:hover { transform: translateY(-2px); box-shadow: 0 7px 0 #c94f00; }
+.btn-main:active { transform: translateY(3px); box-shadow: 0 2px 0 #c94f00; }
 .btn-wa {
   width: 100%;
-  background: var(--green-wa);
-  color: #fff;
+  background-color: #25d366;
+  color: #ffffff !important;
   font-family: 'Fredoka One', 'Arial Black', Impact, cursive;
   font-size: 1.15rem;
   border: none;
   border-radius: 16px;
   padding: 1rem;
   cursor: pointer;
-  box-shadow: 0 5px 0 var(--green-wa-dark);
+  box-shadow: 0 5px 0 #1a9e4a;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
   transition: all 0.15s;
+  -webkit-appearance: none;
 }
-.btn-wa:hover { transform: translateY(-2px); box-shadow: 0 7px 0 var(--green-wa-dark); }
-.btn-wa:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--green-wa-dark); }
+.btn-wa:hover { transform: translateY(-2px); box-shadow: 0 7px 0 #1a9e4a; }
+.btn-wa:active { transform: translateY(3px); box-shadow: 0 2px 0 #1a9e4a; }
 .btn-ghost {
   width: 100%;
   background: none;
   border: none;
-  color: var(--muted);
+  color: #666666;
   font-family: 'Nunito', Arial, sans-serif;
   font-weight: 700;
   font-size: 13px;
@@ -384,23 +392,23 @@ header {
   cursor: pointer;
   margin-top: 6px;
 }
-.btn-ghost:hover { color: var(--orange); }
+.btn-ghost:hover { color: #ff6b35; }
 
 /* ── HOW IT WORKS ── */
 .how-step { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 16px; }
 .how-num {
   width: 34px; height: 34px;
   border-radius: 50%;
-  background: var(--orange);
+  background: #ff6b35;
   color: #fff;
   font-family: 'Fredoka One', 'Arial Black', Impact, cursive;
   font-size: 1rem;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 3px 0 var(--orange-dark);
+  box-shadow: 0 3px 0 #c94f00;
 }
-.how-text strong { display: block; font-size: 14px; font-weight: 800; color: #1a1a1a; color: var(--text); }
-.how-text span { font-size: 12px; color: var(--muted); }
+.how-text strong { display: block; font-size: 14px; font-weight: 800; color: #1a1a1a; color: #1a1a1a; }
+.how-text span { font-size: 12px; color: #666666; }
 
 /* ── TRUST BADGES ── */
 .trust-row {
@@ -411,13 +419,13 @@ header {
   flex-wrap: wrap;
 }
 .trust-badge {
-  background: #ffffff; background: var(--card);
-  border: 1px solid var(--border);
+  background: #ffffff; background-color: #ffffff;
+  border: 1px solid rgba(0,0,0,0.1);
   border-radius: 50px;
   padding: 0.35rem 0.9rem;
   font-size: 12px;
   font-weight: 700;
-  color: var(--muted);
+  color: #666666;
   display: flex;
   align-items: center;
   gap: 5px;
@@ -432,7 +440,7 @@ footer {
   font-size: 12px;
   font-weight: 600;
 }
-footer a { color: var(--yellow); text-decoration: none; }
+footer a { color: #f7c948; text-decoration: none; }
 
 /* ══════════════════════════════════
    MODAL FLOW
@@ -449,8 +457,8 @@ footer a { color: var(--yellow); text-decoration: none; }
 }
 .overlay.open { display: flex; }
 .modal {
-  background: #ffffff; background: var(--card);
-  border-radius: 24px 24px 0 0;
+  background: #ffffff; background: #ffffff;
+  border-radius: 24px 24px 24px 0;
   padding: 1.5rem 1.25rem 2rem;
   width: 100%;
   max-width: 480px;
@@ -464,7 +472,7 @@ footer a { color: var(--yellow); text-decoration: none; }
 }
 .modal-drag {
   width: 40px; height: 4px;
-  background: var(--border);
+  background-color: rgba(0,0,0,0.1);
   border-radius: 4px;
   margin: 0 auto 1.25rem;
 }
@@ -477,15 +485,15 @@ footer a { color: var(--yellow); text-decoration: none; }
   display: flex; align-items: center; justify-content: center;
   font-family: 'Fredoka One', 'Arial Black', Impact, cursive;
   font-size: 0.9rem;
-  background: var(--surface);
-  color: var(--muted);
-  border: 2px solid var(--border);
+  background: #f5f0eb;
+  color: #666666;
+  border: 2px solid rgba(0,0,0,0.1);
   transition: all 0.3s;
 }
-.s-dot.active { background: var(--orange); color: #fff; border-color: var(--orange); }
-.s-dot.done { background: var(--green-wa); color: #fff; border-color: var(--green-wa); }
-.s-line { flex: 1; height: 2px; background: var(--border); border-radius: 2px; transition: background 0.3s; }
-.s-line.done { background: var(--green-wa); }
+.s-dot.active { background-color: #ff6b35 !important; color: #ffffff !important; border-color: #ff6b35 !important; }
+.s-dot.done { background-color: #25d366 !important; color: #ffffff !important; border-color: #25d366 !important; }
+.s-line { flex: 1; height: 2px; background-color: rgba(0,0,0,0.1); border-radius: 2px; transition: background 0.3s; }
+.s-line.done { background-color: #25d366; }
 
 .panel { display: none; animation: fadeUp 0.25s ease; }
 .panel.active { display: block; }
@@ -496,18 +504,18 @@ footer a { color: var(--yellow); text-decoration: none; }
 
 /* order review */
 .order-card {
-  background: rgba(255,107,53,0.07);
+  background-color: #fff3ef;
   border-radius: 14px;
   padding: 1rem;
   margin-bottom: 1rem;
 }
-.o-row { display: flex; justify-content: space-between; font-size: 14px; font-weight: 700; padding: 5px 0; color: #1a1a1a; color: var(--text); border-bottom: 1px solid rgba(0,0,0,0.05); }
+.o-row { display: flex; justify-content: space-between; font-size: 14px; font-weight: 700; padding: 5px 0; color: #1a1a1a; color: #1a1a1a; border-bottom: 1px solid rgba(0,0,0,0.05); }
 .o-row:last-of-type { border: none; }
-.o-total { display: flex; justify-content: space-between; font-family: 'Fredoka One', 'Arial Black', Impact, cursive; font-size: 1.15rem; color: var(--orange-dark); border-top: 1.5px dashed rgba(255,107,53,0.3); padding-top: 8px; margin-top: 6px; }
+.o-total { display: flex; justify-content: space-between; font-family: 'Fredoka One', 'Arial Black', Impact, cursive; font-size: 1.15rem; color: #c94f00; border-top: 1.5px dashed rgba(255,107,53,0.3); padding-top: 8px; margin-top: 6px; }
 
 /* payment instructions */
 .pay-card {
-  background: var(--surface);
+  background-color: #f5f0eb;
   border-radius: 14px;
   padding: 1rem;
   margin-bottom: 1rem;
@@ -518,7 +526,7 @@ footer a { color: var(--yellow); text-decoration: none; }
 .pay-logo.mtn { background: #ffc200; }
 .copy-row {
   background: #fff;
-  border: 1.5px dashed var(--orange);
+  border: 1.5px dashed #ff6b35;
   border-radius: 12px;
   padding: 0.6rem 1rem;
   display: flex;
@@ -526,10 +534,10 @@ footer a { color: var(--yellow); text-decoration: none; }
   align-items: center;
   margin: 8px 0;
 }
-.copy-lbl { font-size: 10px; color: var(--muted); font-weight: 700; text-transform: uppercase; }
-.copy-val { font-family: 'Fredoka One', 'Arial Black', Impact, cursive; font-size: 1.2rem; color: var(--orange-dark); letter-spacing: 2px; }
+.copy-lbl { font-size: 10px; color: #666666; font-weight: 700; text-transform: uppercase; }
+.copy-val { font-family: 'Fredoka One', 'Arial Black', Impact, cursive; font-size: 1.2rem; color: #c94f00; letter-spacing: 2px; }
 .copy-btn {
-  background: var(--orange);
+  background-color: #ff6b35;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -541,12 +549,12 @@ footer a { color: var(--yellow); text-decoration: none; }
   flex-shrink: 0;
 }
 .pay-steps { list-style: none; margin-top: 0.85rem; }
-.pay-steps li { display: flex; gap: 10px; font-size: 13px; font-weight: 600; color: #1a1a1a; color: var(--text); padding: 5px 0; align-items: flex-start; }
+.pay-steps li { display: flex; gap: 10px; font-size: 13px; font-weight: 600; color: #1a1a1a; color: #1a1a1a; padding: 5px 0; align-items: flex-start; }
 .pay-steps li .n {
   width: 22px; height: 22px;
   border-radius: 50%;
-  background: var(--orange);
-  color: #fff;
+  background-color: #ff6b35;
+  color: #ffffff;
   font-size: 11px;
   display: inline-flex; align-items: center; justify-content: center;
   flex-shrink: 0;
@@ -571,14 +579,14 @@ footer a { color: var(--yellow); text-decoration: none; }
 
 /* confirmed */
 .confirmed-hero { text-align: center; padding: 0.5rem 0 1rem; }
-.big-tick { font-size: 4rem; animation: pop 0.5s ease; display: block; }
+.big-tick { font-size: 4rem; animation: pop 0.5s ease; display: block; color: #1a1a1a; }
 @keyframes pop {
   0% { transform: scale(0) rotate(-10deg); }
   70% { transform: scale(1.2) rotate(5deg); }
   100% { transform: scale(1) rotate(0deg); }
 }
 
-.note { font-size: 11px; color: var(--muted); text-align: center; margin-top: 0.75rem; }
+.note { font-size: 11px; color: #666666; text-align: center; margin-top: 0.75rem; }
 
 /* ── RESPONSIVE ── */
 @media (min-width: 481px) {
@@ -791,19 +799,19 @@ footer a { color: var(--yellow); text-decoration: none; }
   <div style="display:flex;flex-direction:column;gap:10px;">
     <div style="display:flex;gap:12px;align-items:flex-start;">
       <span style="font-size:1.3rem;flex-shrink:0;">✅</span>
-      <div><strong style="font-size:14px;color:var(--text);display:block;">Minimum sales guarantee</strong><span style="font-size:13px;color:var(--muted);">The draw only proceeds once minimum ticket sales are reached. If not met, every participant receives a full refund via MoMo within 48 hours. No questions asked.</span></div>
+      <div><strong style="font-size:14px;color:#1a1a1a;display:block;">Minimum sales guarantee</strong><span style="font-size:13px;color:#666666;">The draw only proceeds once minimum ticket sales are reached. If not met, every participant receives a full refund via MoMo within 48 hours. No questions asked.</span></div>
     </div>
     <div style="display:flex;gap:12px;align-items:flex-start;">
       <span style="font-size:1.3rem;flex-shrink:0;">🎥</span>
-      <div><strong style="font-size:14px;color:var(--text);display:block;">Live transparent draw</strong><span style="font-size:13px;color:var(--muted);">The draw is conducted live on WhatsApp/Facebook. All confirmed ticket numbers are published before the draw so you can verify your entry.</span></div>
+      <div><strong style="font-size:14px;color:#1a1a1a;display:block;">Live transparent draw</strong><span style="font-size:13px;color:#666666;">The draw is conducted live on WhatsApp/Facebook. All confirmed ticket numbers are published before the draw so you can verify your entry.</span></div>
     </div>
     <div style="display:flex;gap:12px;align-items:flex-start;">
       <span style="font-size:1.3rem;flex-shrink:0;">🔒</span>
-      <div><strong style="font-size:14px;color:var(--text);display:block;">Payment verification</strong><span style="font-size:13px;color:var(--muted);">Every payment is manually verified against our MoMo transaction records before a ticket number is issued. No payment = no ticket.</span></div>
+      <div><strong style="font-size:14px;color:#1a1a1a;display:block;">Payment verification</strong><span style="font-size:13px;color:#666666;">Every payment is manually verified against our MoMo transaction records before a ticket number is issued. No payment = no ticket.</span></div>
     </div>
     <div style="display:flex;gap:12px;align-items:flex-start;">
       <span style="font-size:1.3rem;flex-shrink:0;">📞</span>
-      <div><strong style="font-size:14px;color:var(--text);display:block;">Direct contact</strong><span style="font-size:13px;color:var(--muted);">Questions or concerns? WhatsApp us directly at +260 96 179 4739 before entering.</span></div>
+      <div><strong style="font-size:14px;color:#1a1a1a;display:block;">Direct contact</strong><span style="font-size:13px;color:#666666;">Questions or concerns? WhatsApp us directly at +260 96 179 4739 before entering.</span></div>
     </div>
   </div>
 </div>
@@ -864,7 +872,7 @@ footer a { color: var(--yellow); text-decoration: none; }
         <div class="pay-logo" id="m-logo">🔴</div>
         <div>
           <div style="font-weight:800;font-size:15px;" id="m-prov-name">Airtel Money</div>
-          <div style="font-size:12px;color:var(--muted);">Send to this merchant number</div>
+          <div style="font-size:12px;color:#666666;">Send to this merchant number</div>
         </div>
       </div>
       <div class="copy-row">
@@ -896,13 +904,13 @@ footer a { color: var(--yellow); text-decoration: none; }
   <!-- PANEL 3: WhatsApp -->
   <div class="panel" id="p3">
     <div class="card-title" style="text-align:center;margin-bottom:0.5rem;">💬 Confirm on WhatsApp</div>
-    <p style="font-size:13px;color:var(--muted);font-weight:600;margin-bottom:0.85rem;text-align:center;">We've prepared your message. Open WhatsApp, send it, and attach your payment screenshot!</p>
+    <p style="font-size:13px;color:#666666;font-weight:600;margin-bottom:0.85rem;text-align:center;">We've prepared your message. Open WhatsApp, send it, and attach your payment screenshot!</p>
     <div class="wa-bubble">
       <strong>Your message to LuckyDip:</strong>
       <span id="wa-msg">Loading...</span>
       <div class="wa-time" id="wa-time">now</div>
     </div>
-    <p style="font-size:12px;font-weight:700;color:var(--orange-dark);margin-bottom:0.75rem;text-align:center;">📸 Remember to attach your payment screenshot!</p>
+    <p style="font-size:12px;font-weight:700;color:#c94f00;margin-bottom:0.75rem;text-align:center;">📸 Remember to attach your payment screenshot!</p>
     <button class="btn-wa" onclick="sendWhatsApp()">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.37 5.07L2 22l5.1-1.34A9.94 9.94 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm4.93 13.44c-.21.59-1.23 1.13-1.69 1.19-.46.06-.89.22-2.98-.62-2.5-1.03-4.1-3.57-4.22-3.73-.12-.17-.97-1.29-.97-2.46 0-1.17.61-1.74.83-1.98.21-.24.46-.3.61-.3h.44c.14 0 .33-.06.52.39.2.46.67 1.64.73 1.76.06.12.1.26.02.41-.08.15-.12.25-.24.38-.12.13-.25.29-.36.39-.12.1-.24.21-.1.41.14.2.61.9 1.31 1.46.9.75 1.66 1 1.87 1.11.21.11.33.09.45-.05.12-.14.52-.6.66-.81.14-.21.28-.17.47-.1.19.07 1.2.57 1.41.67.21.1.35.15.4.23.05.09.05.52-.16 1.11z"/></svg>
       Open WhatsApp &amp; Send
@@ -915,22 +923,22 @@ footer a { color: var(--yellow); text-decoration: none; }
     <div class="confirmed-hero">
       <span class="big-tick">🎉</span>
       <div class="card-title" style="text-align:center;margin:0.5rem 0;">Message sent!</div>
-      <p style="font-size:14px;color:var(--muted);font-weight:600;margin-bottom:1rem;">Thanks for entering LuckyDip! Here's what happens next:</p>
-      <div style="background:var(--surface);border-radius:14px;padding:1rem;text-align:left;margin-bottom:1rem;">
+      <p style="font-size:14px;color:#666666;font-weight:600;margin-bottom:1rem;">Thanks for entering LuckyDip! Here's what happens next:</p>
+      <div style="background:#f5f0eb;border-radius:14px;padding:1rem;text-align:left;margin-bottom:1rem;">
         <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:12px;">
-          <div style="width:28px;height:28px;border-radius:50%;background:var(--orange);color:#fff;font-family:'Fredoka One',cursive;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
-          <div style="font-size:13px;font-weight:700;color:var(--text);padding-top:4px;">We verify your MoMo payment against our transaction records — usually within 30 minutes.</div>
+          <div style="width:28px;height:28px;border-radius:50%;background:#ff6b35;color:#fff;font-family:'Fredoka One',cursive;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+          <div style="font-size:13px;font-weight:700;color:#1a1a1a;padding-top:4px;">We verify your MoMo payment against our transaction records — usually within 30 minutes.</div>
         </div>
         <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:12px;">
-          <div style="width:28px;height:28px;border-radius:50%;background:var(--orange);color:#fff;font-family:'Fredoka One',cursive;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
-          <div style="font-size:13px;font-weight:700;color:var(--text);padding-top:4px;">Once confirmed, we send your official ticket numbers via WhatsApp from <strong>+260 96 179 4739</strong>.</div>
+          <div style="width:28px;height:28px;border-radius:50%;background:#ff6b35;color:#fff;font-family:'Fredoka One',cursive;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+          <div style="font-size:13px;font-weight:700;color:#1a1a1a;padding-top:4px;">Once confirmed, we send your official ticket numbers via WhatsApp from <strong>+260 96 179 4739</strong>.</div>
         </div>
         <div style="display:flex;gap:12px;align-items:flex-start;">
-          <div style="width:28px;height:28px;border-radius:50%;background:var(--orange);color:#fff;font-family:'Fredoka One',cursive;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
-          <div style="font-size:13px;font-weight:700;color:var(--text);padding-top:4px;">The full list of confirmed ticket numbers will be published before the live draw on Sunday 19 April.</div>
+          <div style="width:28px;height:28px;border-radius:50%;background:#ff6b35;color:#fff;font-family:'Fredoka One',cursive;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+          <div style="font-size:13px;font-weight:700;color:#1a1a1a;padding-top:4px;">The full list of confirmed ticket numbers will be published before the live draw on Sunday 19 April.</div>
         </div>
       </div>
-      <div style="background:#fff8e1;border:1.5px solid var(--yellow);border-radius:12px;padding:0.85rem 1rem;margin-bottom:1rem;font-size:12px;font-weight:700;color:#7a4f00;">
+      <div style="background:#fff8e1;border:1.5px solid #f7c948;border-radius:12px;padding:0.85rem 1rem;margin-bottom:1rem;font-size:12px;font-weight:700;color:#7a4f00;">
         ⚠️ Your entry is only confirmed once you receive a WhatsApp reply from us with your official ticket numbers. Do not consider yourself entered until then.
       </div>
       <div style="background:#e8f5e9;border:1.5px solid #81c784;border-radius:12px;padding:0.85rem 1rem;margin-bottom:1rem;font-size:12px;font-weight:700;color:#1b5e20;">
@@ -1014,7 +1022,7 @@ footer a { color: var(--yellow); text-decoration: none; }
       document.getElementById('s-tickets').textContent = count + ' ticket' + (count > 1 ? 's' : '');
       document.getElementById('s-unit').textContent = 'K' + (price/count).toFixed(2) + ' each';
       document.getElementById('s-disc').textContent = save > 0 ? 'Save K' + saved + ' (' + save + '%)' : 'None';
-      document.getElementById('s-disc').style.color = save > 0 ? '#2a9d2a' : 'var(--muted)';
+      document.getElementById('s-disc').style.color = save > 0 ? '#2a9d2a' : '#666666';
       document.getElementById('s-total').textContent = 'K' + price;
     }
 
