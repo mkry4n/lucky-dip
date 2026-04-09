@@ -598,7 +598,7 @@ footer a { color: var(--yellow); text-decoration: none; }
     <p>Lusaka's luckiest raffle is live!</p>
     <div class="prize-pill">🏆 iPhone 15 Pro Max — Grand Prize</div>
     <div style="display:flex;gap:10px;justify-content:center;margin-top:0.75rem;flex-wrap:wrap;">
-      <div style="background:rgba(255,255,255,0.25);border:2px solid rgba(255,255,255,0.5);border-radius:50px;padding:0.35rem 1rem;font-family:'Fredoka One',cursive;font-size:0.95rem;color:#fff;">🥈 2nd Place — K2,000 Cash</div>
+      <div style="background:rgba(255,255,255,0.25);border:2px solid rgba(255,255,255,0.5);border-radius:50px;padding:0.35rem 1rem;font-family:'Fredoka One',cursive;font-size:0.95rem;color:#fff;">🥈 2nd Place — K1,000 Cash</div>
       <div style="background:rgba(255,255,255,0.25);border:2px solid rgba(255,255,255,0.5);border-radius:50px;padding:0.35rem 1rem;font-family:'Fredoka One',cursive;font-size:0.95rem;color:#fff;">🥉 3rd Place — K500 Cash</div>
     </div>
     <div class="draw-tag">📅 Draw: Sunday 19 April 2026 · Lusaka</div>
@@ -627,7 +627,7 @@ footer a { color: var(--yellow); text-decoration: none; }
         <div style="font-family:'Fredoka One',cursive;color:#d0d0d0;font-size:1rem;">2nd Place</div>
         <div style="font-size:13px;color:rgba(255,255,255,0.7);font-weight:600;">Cash Prize</div>
       </div>
-      <div style="font-family:'Fredoka One',cursive;color:#d0d0d0;font-size:1.2rem;">K2,000</div>
+      <div style="font-family:'Fredoka One',cursive;color:#d0d0d0;font-size:1.2rem;">K1,000</div>
     </div>
     <div style="display:flex;align-items:center;gap:14px;background:rgba(255,255,255,0.06);border-radius:14px;padding:0.9rem 1rem;">
       <div style="font-size:2rem;flex-shrink:0;">🥉</div>
@@ -836,7 +836,7 @@ footer a { color: var(--yellow); text-decoration: none; }
   <div class="panel active" id="p1">
     <div class="card-title" style="text-align:center;margin-bottom:1rem;">🎟️ Review Your Order</div>
     <div class="order-card">
-      <div class="o-row"><span>Prize Pool</span><span>iPhone · K2,000 · K500</span></div>
+      <div class="o-row"><span>Prize Pool</span><span>iPhone · K1,000 · K500</span></div>
       <div class="o-row"><span>Tickets</span><span id="m-tickets">3 tickets</span></div>
       <div class="o-row"><span>Name</span><span id="m-name">—</span></div>
       <div class="o-row"><span>WhatsApp</span><span id="m-wa">—</span></div>
