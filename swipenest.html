@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>SwipeNest</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --tc:#C4623A;--tc2:#9C3D1E;
+  --forest:#1E3028;--forest2:#131F1A;
+  --ink:#110E0C;--chalk:#FAF8F4;
+  --muted:rgba(250,248,244,0.45);
+  --faint:rgba(250,248,244,0.07);
+  --faint2:rgba(250,248,244,0.12);
+  --border:rgba(250,248,244,0.09);
+  --gold:#D4A843;--emerald:#2ECC8A;--silver:#9CA3AF;
+  --violet:#7c3aed;--blue:#2563eb;
+}
+html,body{height:100%;background:#0D1510;font-family:'Outfit',sans-serif;overflow:hidden}
+body{display:flex;align-items:center;justify-content:center}
+
+/* ── SHELL ── */
+#shell{
+width:390px;height:844px;position:relative;overflow:hidden;
+background:var(–forest2);border-radius:44px;
+box-shadow:0 0 0 1px rgba(255,255,255,0.06),0 60px 120px rgba(0,0,0,0.7),inset 0 1px 0 rgba(255,255,255,0.08);
+display:flex;flex-direction:column;
+}
+#shell::before{
+content:’’;position:absolute;inset:0;pointer-events:none;z-index:0;
+background:
+radial-gradient(ellipse 360px 280px at 15% -5%,rgba(196,98,58,0.14) 0%,transparent 65%),
+radial-gradient(ellipse 300px 260px at 85% 105%,rgba(30,48,40,0.6) 0%,transparent 65%),
+radial-gradient(ellipse 180px 180px at 50% 45%,rgba(212,168,67,0.04) 0%,transparent 65%);
+}
+
+/* ── HEADER ── */
+.header{
+position:relative;z-index:10;
+padding:36px 24px 10px;
+display:flex;align-items:center;justify-content:space-between;
+flex-shrink:0;
+}
+.logo-word{font-family:‘Cormorant Garamond’,serif;font-size:30px;font-weight:700;color:var(–chalk);letter-spacing:-0.5px;line-height:1}
+.logo-word span{color:var(–tc)}
+.logo-sub{font-size:10px;font-weight:600;color:rgba(250,248,244,0.3);letter-spacing:2px;text-transform:uppercase;margin-top:2px}
+.hbtn{width:38px;height:38px;border-radius:13px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;background:var(–faint);border:1px solid var(–border);transition:background 0.2s}
+.hbtn:hover{background:var(–faint2)}
+.hbtn svg{width:17px;height:17px;stroke:rgba(250,248,244,0.55);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── PILL SELECTOR ── */
+.pill-selector{
+position:relative;z-index:10;
+margin:0 24px 12px;
+background:rgba(250,248,244,0.06);
+border:1px solid rgba(250,248,244,0.08);
+border-radius:22px;
+padding:3px;
+display:flex;
+flex-shrink:0;
+}
+.pill-opt{
+flex:1;text-align:center;
+padding:8px 4px;border-radius:18px;
+font-size:11px;font-weight:700;
+color:rgba(250,248,244,0.38);
+cursor:pointer;
+transition:color 0.22s;
+letter-spacing:0.2px;
+position:relative;z-index:1;
+white-space:nowrap;
+}
+.pill-opt.on{color:var(–chalk)}
+.pill-track{
+position:absolute;top:3px;bottom:3px;left:3px;
+border-radius:18px;
+background:rgba(250,248,244,0.1);
+border:1px solid rgba(250,248,244,0.12);
+transition:transform 0.28s cubic-bezier(0.34,1.2,0.64,1),width 0.28s cubic-bezier(0.34,1.2,0.64,1);
+backdrop-filter:blur(8px);
+}
+
+/* ── VIEWS ── */
+.view{position:relative;z-index:5;flex:1;display:flex;flex-direction:column;overflow:hidden}
+.view.hidden{display:none!important}
+
+/* ── SWIPE VIEW ── */
+#view-swipe{padding:0 18px;gap:12px}
+.card-stage{flex:1;position:relative;display:flex;align-items:center;overflow:visible}
+.stk{position:absolute;width:100%;height:100%;border-radius:28px;pointer-events:none}
+.stk.s3{transform:scale(0.88) translateY(22px);z-index:1;border:1px solid rgba(255,255,255,0.04)}
+.stk.s2{transform:scale(0.94) translateY(11px);z-index:2;border:1px solid rgba(255,255,255,0.06)}
+
+/* MAIN CARD */
+.prop-card{
+position:relative;z-index:3;width:100%;height:100%;
+border-radius:28px;overflow:hidden;cursor:grab;
+box-shadow:0 28px 64px rgba(0,0,0,0.55),0 0 0 1px rgba(255,255,255,0.07);
+transform-origin:50% 108%;will-change:transform;
+}
+.prop-card:active{cursor:grabbing}
+.prop-card.out-r{transition:transform 0.44s cubic-bezier(0.25,0.46,0.45,0.94),opacity 0.44s!important;transform:translateX(140%) rotate(22deg)!important;opacity:0!important}
+.prop-card.out-l{transition:transform 0.44s cubic-bezier(0.25,0.46,0.45,0.94),opacity 0.44s!important;transform:translateX(-140%) rotate(-22deg)!important;opacity:0!important}
+.card-bg{position:absolute;inset:0}
+.card-vignette{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,0.08) 38%,rgba(0,0,0,0.6) 68%,rgba(0,0,0,0.92) 100%)}
+.photo-dots{position:absolute;top:16px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:5}
+.pdot{height:3px;border-radius:2px;background:rgba(255,255,255,0.3);transition:all 0.2s}
+.pdot.a{width:32px;background:rgba(255,255,255,0.92)}
+.pdot:not(.a){width:22px}
+.stamp{position:absolute;top:26px;padding:9px 18px;border-radius:14px;font-family:‘Cormorant Garamond’,serif;font-size:20px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:0;pointer-events:none;z-index:10;transition:opacity 0.1s}
+.stamp.sn{left:18px;background:#16a34a;color:white;transform:rotate(-7deg);box-shadow:0 4px 20px rgba(22,163,74,0.4)}
+.stamp.sp{right:18px;background:#dc2626;color:white;transform:rotate(7deg);box-shadow:0 4px 20px rgba(220,38,38,0.4)}
+.stamp.vis{opacity:1}
+
+/* agent badge */
+.card-agent-badge{position:absolute;top:16px;right:16px;z-index:6;display:flex;align-items:center;gap:5px;backdrop-filter:blur(12px);border-radius:20px;padding:5px 10px 5px 7px;font-size:11px;font-weight:700;letter-spacing:0.3px;box-shadow:0 2px 12px rgba(0,0,0,0.3)}
+.card-agent-badge.gold{background:rgba(212,168,67,0.2);border:1px solid rgba(212,168,67,0.4);color:var(–gold)}
+.card-agent-badge.emerald{background:rgba(46,204,138,0.15);border:1px solid rgba(46,204,138,0.35);color:var(–emerald)}
+.card-agent-badge.tc{background:rgba(196,98,58,0.18);border:1px solid rgba(196,98,58,0.38);color:#E8855C}
+.card-agent-badge.silver{background:rgba(156,163,175,0.15);border:1px solid rgba(156,163,175,0.3);color:var(–silver)}
+.badge-dot{width:7px;height:7px;border-radius:50%}
+.gold .badge-dot{background:var(–gold)}
+.emerald .badge-dot{background:var(–emerald)}
+.tc .badge-dot{background:#E8855C}
+.silver .badge-dot{background:var(–silver)}
+
+/* listing type colour on card type pill */
+.card-type{background:var(–tc);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:700;color:white;letter-spacing:0.3px}
+.card-type.stays{background:var(–blue)}
+.card-type.sales{background:var(–emerald);color:var(–ink)}
+
+/* card info */
+.card-info{position:absolute;bottom:0;left:0;right:0;padding:18px 18px 20px;z-index:4}
+.card-type-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.card-rating{display:flex;align-items:center;gap:5px}
+.rating-num{font-size:12px;font-weight:600;color:rgba(250,248,244,0.7)}
+.rating-count{font-size:11px;color:rgba(250,248,244,0.4)}
+.card-title{font-family:‘Cormorant Garamond’,serif;font-size:22px;font-weight:700;color:var(–chalk);line-height:1.2;margin-bottom:4px}
+.card-loc{font-size:12px;color:rgba(250,248,244,0.55);display:flex;align-items:center;gap:4px;margin-bottom:10px}
+.card-loc svg{width:12px;height:12px;stroke:rgba(250,248,244,0.4);fill:none;stroke-width:2;flex-shrink:0}
+.card-bottom-row{display:flex;align-items:flex-end;justify-content:space-between}
+.card-price{font-family:‘Cormorant Garamond’,serif;font-size:28px;font-weight:700;color:var(–chalk);line-height:1}
+.card-price sub{font-size:13px;font-weight:400;color:rgba(250,248,244,0.45);font-family:‘Outfit’,sans-serif;vertical-align:baseline}
+.card-chips{display:flex;gap:7px}
+.chip-stat{background:rgba(250,248,244,0.1);backdrop-filter:blur(10px);border:1px solid rgba(250,248,244,0.12);border-radius:10px;padding:5px 9px;display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:rgba(250,248,244,0.8)}
+.chip-stat svg{width:12px;height:12px;stroke:rgba(250,248,244,0.6);fill:none;stroke-width:2;flex-shrink:0}
+.tags-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.tag{background:rgba(255,255,255,0.08);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:3px 9px;font-size:11px;font-weight:500;color:rgba(250,248,244,0.75)}
+.view-more-btn{margin-top:11px;width:100%;background:rgba(250,248,244,0.08);backdrop-filter:blur(14px);border:1px solid rgba(250,248,244,0.15);border-radius:13px;padding:10px;color:rgba(250,248,244,0.85);font-family:‘Outfit’,sans-serif;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:background 0.2s;letter-spacing:0.2px}
+.view-more-btn:hover{background:rgba(250,248,244,0.14)}
+.view-more-btn svg{width:14px;height:14px;stroke:rgba(250,248,244,0.6);fill:none;stroke-width:2}
+
+/* ── ACTIONS ── */
+.actions{display:flex;align-items:center;justify-content:center;gap:14px;padding:2px 0 6px;flex-shrink:0}
+.act{border:none;cursor:pointer;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.18s}
+.act:hover{transform:scale(1.14)!important}
+.act:active{transform:scale(0.9)!important}
+.act svg{pointer-events:none}
+.act.undo{width:38px;height:38px;background:rgba(250,248,244,0.06);border:1.5px solid rgba(250,248,244,0.1)}
+.act.undo svg{width:16px;height:16px;stroke:rgba(250,248,244,0.45);fill:none;stroke-width:2;stroke-linecap:round}
+.act.skip{width:58px;height:58px;background:rgba(220,38,38,0.1);border:1.5px solid rgba(220,38,38,0.25);box-shadow:0 4px 20px rgba(220,38,38,0.1)}
+.act.skip svg{width:22px;height:22px;stroke:#ef4444;fill:none;stroke-width:2.2;stroke-linecap:round}
+.act.nst{width:58px;height:58px;background:rgba(196,98,58,0.12);border:1.5px solid rgba(196,98,58,0.3);box-shadow:0 4px 20px rgba(196,98,58,0.15);position:relative}
+.act.nst svg{width:22px;height:22px;stroke:var(–tc);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.act.nst::after{content:’’;position:absolute;inset:-7px;border-radius:50%;border:1.5px solid rgba(196,98,58,0.25);animation:pr 2.8s ease-out infinite}
+@keyframes pr{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.55);opacity:0}}
+.act.sup{width:46px;height:46px;background:rgba(212,168,67,0.1);border:1.5px solid rgba(212,168,67,0.25)}
+.act.sup svg{width:18px;height:18px;stroke:var(–gold);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── EMPTY ── */
+.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:32px}
+.empty svg{width:56px;height:56px;stroke:rgba(250,248,244,0.2);fill:none;stroke-width:1.2;stroke-linecap:round}
+.empty-h{font-family:‘Cormorant Garamond’,serif;font-size:26px;font-weight:700;color:var(–chalk)}
+.empty-p{font-size:14px;color:var(–muted);line-height:1.65;margin-top:4px}
+.btn-p{background:var(–tc);color:white;border:none;border-radius:16px;padding:14px 32px;font-family:‘Outfit’,sans-serif;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 8px 24px rgba(196,98,58,0.32);transition:background 0.2s,transform 0.15s;margin-top:6px}
+.btn-p:hover{background:#d46b41;transform:translateY(-2px)}
+
+/* ── DETAIL VIEW ── */
+#view-detail{overflow-y:auto}
+.d-hero{height:270px;position:relative;flex-shrink:0;overflow:hidden}
+.d-hero-bg{position:absolute;inset:0;background-size:cover;background-position:center}
+.d-hero-ov{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.15) 0%,rgba(0,0,0,0.72) 100%)}
+.d-back{position:absolute;top:16px;left:16px;z-index:5;background:rgba(0,0,0,0.3);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.12);border-radius:13px;color:white;padding:8px 14px;cursor:pointer;font-family:‘Outfit’,sans-serif;font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px}
+.d-back svg{width:14px;height:14px;stroke:white;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.d-hero-info{position:absolute;bottom:18px;left:20px;right:20px;z-index:5}
+.d-badge-row{display:flex;align-items:center;gap:8px;margin-bottom:7px;flex-wrap:wrap}
+.d-type{border-radius:20px;padding:4px 12px;font-size:11px;font-weight:700;color:white}
+.d-type.leases{background:var(–tc)}
+.d-type.stays{background:var(–blue)}
+.d-type.sales{background:var(–emerald);color:var(–ink)}
+.d-agent-badge{display:flex;align-items:center;gap:5px;border-radius:20px;padding:4px 10px 4px 7px;font-size:11px;font-weight:700}
+.d-agent-badge.gold{background:rgba(212,168,67,0.2);border:1px solid rgba(212,168,67,0.4);color:var(–gold)}
+.d-agent-badge.emerald{background:rgba(46,204,138,0.15);border:1px solid rgba(46,204,138,0.35);color:var(–emerald)}
+.d-agent-badge.tc{background:rgba(196,98,58,0.18);border:1px solid rgba(196,98,58,0.38);color:#E8855C}
+.d-title{font-family:‘Cormorant Garamond’,serif;font-size:24px;font-weight:700;color:var(–chalk);line-height:1.2}
+.d-loc{font-size:13px;color:rgba(250,248,244,0.55);margin-top:4px;display:flex;align-items:center;gap:4px}
+.d-loc svg{width:13px;height:13px;stroke:rgba(250,248,244,0.4);fill:none;stroke-width:2;flex-shrink:0}
+.d-body{padding:18px 20px 100px;display:flex;flex-direction:column;gap:20px}
+.d-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.d-stat{background:var(–faint);border:1px solid var(–border);border-radius:16px;padding:14px 10px;text-align:center}
+.d-stat svg{width:20px;height:20px;stroke:var(–tc);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;margin:0 auto 6px;display:block}
+.d-stat-v{font-family:‘Cormorant Garamond’,serif;font-size:18px;font-weight:700;color:var(–chalk)}
+.d-stat-l{font-size:10px;color:var(–muted);margin-top:2px;font-weight:500;letter-spacing:0.3px}
+.sec-lbl{font-size:10px;font-weight:700;color:rgba(250,248,244,0.35);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px}
+.d-desc{font-size:14px;color:rgba(250,248,244,0.62);line-height:1.8}
+.d-tags{display:flex;flex-wrap:wrap;gap:8px}
+.d-tag{background:var(–faint);border:1px solid var(–border);border-radius:20px;padding:6px 14px;font-size:12px;font-weight:500;color:rgba(250,248,244,0.65)}
+.ratings-row{display:flex;gap:10px}
+.rating-card{flex:1;background:var(–faint);border:1px solid var(–border);border-radius:16px;padding:14px;text-align:center}
+.rating-card-big{font-family:‘Cormorant Garamond’,serif;font-size:30px;font-weight:700;color:var(–chalk)}
+.rating-card-stars{display:flex;justify-content:center;gap:3px;margin:5px 0 4px}
+.rating-card-lbl{font-size:10px;color:var(–muted);font-weight:600;letter-spacing:0.5px;text-transform:uppercase}
+.landlord-card{background:var(–faint);border:1px solid var(–border);border-radius:18px;padding:16px;display:flex;align-items:center;gap:14px}
+.av{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;color:white;background:linear-gradient(135deg,var(–tc),var(–tc2));box-shadow:0 4px 14px rgba(196,98,58,0.3);flex-shrink:0}
+.ll-name{font-size:15px;font-weight:700;color:var(–chalk)}
+.ll-resp{font-size:12px;color:var(–muted);margin-top:2px;display:flex;align-items:center;gap:4px}
+.ll-resp svg{width:11px;height:11px;stroke:rgba(250,248,244,0.35);fill:none;stroke-width:2;flex-shrink:0}
+.ll-verified{margin-left:auto;background:rgba(46,204,138,0.12);border:1px solid rgba(46,204,138,0.25);border-radius:10px;padding:5px 10px;font-size:11px;font-weight:700;color:var(–emerald);display:flex;align-items:center;gap:4px;flex-shrink:0}
+.ll-verified svg{width:11px;height:11px;stroke:var(–emerald);fill:none;stroke-width:2.5}
+.d-price-row{display:flex;align-items:center;justify-content:space-between}
+.d-price{font-family:‘Cormorant Garamond’,serif;font-size:32px;font-weight:700;color:var(–chalk)}
+.d-price sub{font-size:14px;font-weight:400;color:var(–muted);font-family:‘Outfit’,sans-serif;vertical-align:baseline}
+.d-btns{display:flex;gap:10px}
+.d-skip{background:rgba(220,38,38,0.1);border:1.5px solid rgba(220,38,38,0.25);border-radius:13px;padding:12px 14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s}
+.d-skip svg{width:18px;height:18px;stroke:#ef4444;fill:none;stroke-width:2.2;stroke-linecap:round}
+.d-nest{background:var(–tc);color:white;border:none;border-radius:13px;padding:12px 22px;font-family:‘Outfit’,sans-serif;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 6px 20px rgba(196,98,58,0.32);transition:background 0.2s,transform 0.15s;display:flex;align-items:center;gap:7px}
+.d-nest svg{width:16px;height:16px;stroke:white;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+/* NestMate CTA on detail */
+.nm-cta-card{background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.2);border-radius:14px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;transition:background 0.18s}
+.nm-cta-card:hover{background:rgba(124,58,237,0.16)}
+.nm-cta-label{font-size:13px;font-weight:700;color:#a78bfa}
+.nm-cta-sub{font-size:12px;color:rgba(250,248,244,0.38);margin-top:2px}
+.nm-cta-btn{background:rgba(124,58,237,0.2);border:1px solid rgba(124,58,237,0.3);border-radius:10px;padding:8px 14px;font-size:12px;font-weight:700;color:#a78bfa;white-space:nowrap;flex-shrink:0}
+
+/* ── MATCHES VIEW ── */
+#view-matches{overflow-y:auto;padding:0 18px 100px}
+.m-hd{margin-bottom:18px}
+.m-h{font-family:‘Cormorant Garamond’,serif;font-size:26px;font-weight:700;color:var(–chalk)}
+.m-sub{font-size:13px;color:var(–muted);margin-top:3px}
+.mc{background:var(–faint);border:1px solid var(–border);border-radius:20px;overflow:hidden;margin-bottom:12px;cursor:pointer;transition:transform 0.18s,background 0.18s,box-shadow 0.18s}
+.mc:hover{transform:translateY(-3px);background:var(–faint2);box-shadow:0 14px 36px rgba(0,0,0,0.35)}
+.mc-hero{height:110px;position:relative;overflow:hidden}
+.mc-hero-bg{position:absolute;inset:0;background-size:cover;background-position:center}
+.mc-hero-ov{position:absolute;inset:0;background:rgba(0,0,0,0.22)}
+.mc-badge{position:absolute;top:10px;left:10px;z-index:2}
+.mc-rating{position:absolute;top:10px;right:10px;z-index:2;display:flex;align-items:center;gap:4px;background:rgba(0,0,0,0.4);backdrop-filter:blur(8px);border-radius:10px;padding:4px 8px}
+.mc-rating svg{width:11px;height:11px;fill:var(–gold)}
+.mc-rating span{font-size:11px;font-weight:700;color:var(–chalk)}
+.mc-body{padding:12px 14px;display:flex;justify-content:space-between;align-items:center}
+.mc-name{font-size:14px;font-weight:700;color:var(–chalk)}
+.mc-loc{font-size:11px;color:var(–muted);margin-top:2px;display:flex;align-items:center;gap:3px}
+.mc-loc svg{width:10px;height:10px;stroke:var(–muted);fill:none;stroke-width:2;flex-shrink:0}
+.mc-r{text-align:right}
+.mc-price{font-family:‘Cormorant Garamond’,serif;font-size:18px;font-weight:700;color:var(–chalk)}
+.mc-cta{font-size:11px;color:var(–tc);font-weight:700;margin-top:3px;display:flex;align-items:center;justify-content:flex-end;gap:3px}
+.mc-cta svg{width:11px;height:11px;stroke:var(–tc);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── FILTER VIEW ── */
+#view-filter{overflow-y:auto;padding:0 18px 100px}
+.f-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.f-h{font-family:‘Cormorant Garamond’,serif;font-size:26px;font-weight:700;color:var(–chalk)}
+.f-rst{background:none;border:none;color:rgba(250,248,244,0.35);font-size:13px;cursor:pointer;font-family:‘Outfit’,sans-serif;transition:color 0.15s}
+.f-rst:hover{color:var(–tc)}
+.f-sec{margin-bottom:22px}
+.f-lbl{font-size:10px;font-weight:700;color:rgba(250,248,244,0.35);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px}
+.f-chips{display:flex;flex-wrap:wrap;gap:8px}
+.fchip{border:1.5px solid rgba(250,248,244,0.1);border-radius:22px;padding:8px 18px;font-size:13px;font-weight:500;cursor:pointer;background:var(–faint);color:rgba(250,248,244,0.55);font-family:‘Outfit’,sans-serif;transition:all 0.16s}
+.fchip:hover{border-color:rgba(250,248,244,0.22);color:rgba(250,248,244,0.8)}
+.fchip.on{background:var(–tc);color:white;border-color:transparent;box-shadow:0 4px 14px rgba(196,98,58,0.3)}
+
+/* ── CHAT VIEW ── */
+#view-chat{overflow:hidden}
+.c-hd{padding:14px 18px;border-bottom:1px solid var(–border);display:flex;align-items:center;gap:12px;flex-shrink:0;background:rgba(250,248,244,0.02);backdrop-filter:blur(14px)}
+.c-back{background:none;border:none;cursor:pointer;padding:4px;display:flex;align-items:center;justify-content:center;transition:opacity 0.15s}
+.c-back svg{width:20px;height:20px;stroke:rgba(250,248,244,0.5);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.c-av{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:white;background:linear-gradient(135deg,var(–tc),var(–tc2));flex-shrink:0}
+.c-name{font-size:15px;font-weight:700;color:var(–chalk)}
+.c-prop{font-size:11px;color:var(–tc);font-weight:600;margin-top:1px}
+.c-online{width:8px;height:8px;border-radius:50%;background:var(–emerald);box-shadow:0 0 0 2px rgba(46,204,138,0.25);margin-left:auto;flex-shrink:0}
+.c-msgs{flex:1;overflow-y:auto;padding:14px 18px;display:flex;flex-direction:column;gap:10px}
+.c-sep{text-align:center;font-size:10px;color:rgba(250,248,244,0.22);letter-spacing:0.5px;margin:2px 0}
+.bw-m{display:flex;flex-direction:column;align-items:flex-end}
+.bw-t{display:flex;flex-direction:column;align-items:flex-start}
+.bub{padding:11px 15px;max-width:78%;font-size:14px;line-height:1.55}
+.bub.m{background:linear-gradient(135deg,var(–tc),var(–tc2));color:white;border-radius:18px 18px 4px 18px;box-shadow:0 4px 16px rgba(196,98,58,0.22)}
+.bub.t{background:var(–faint2);border:1px solid var(–border);color:rgba(250,248,244,0.85);border-radius:18px 18px 18px 4px}
+.bub-time{font-size:10px;color:rgba(250,248,244,0.25);margin-top:3px}
+.c-inp-row{padding:10px 16px 26px;border-top:1px solid var(–border);display:flex;gap:10px;flex-shrink:0;background:rgba(250,248,244,0.02)}
+.c-inp{flex:1;background:var(–faint);border:1px solid var(–border);border-radius:16px;padding:12px 16px;font-family:‘Outfit’,sans-serif;font-size:14px;color:var(–chalk);outline:none;transition:border-color 0.2s}
+.c-inp::placeholder{color:rgba(250,248,244,0.28)}
+.c-inp:focus{border-color:rgba(196,98,58,0.45)}
+.c-send{background:var(–tc);border:none;border-radius:14px;width:46px;color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(196,98,58,0.28);transition:background 0.2s,transform 0.15s}
+.c-send:hover{background:#d46b41;transform:scale(1.05)}
+.c-send svg{width:18px;height:18px;stroke:white;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.typing-bub{display:flex;gap:4px;padding:13px 16px;align-items:center}
+.tdot{width:6px;height:6px;border-radius:50%;background:rgba(250,248,244,0.35);animation:tb 1.2s infinite}
+.tdot:nth-child(2){animation-delay:.18s}
+.tdot:nth-child(3){animation-delay:.36s}
+@keyframes tb{0%,60%,100%{opacity:.3;transform:scale(1)}30%{opacity:1;transform:scale(1.25)}}
+
+/* ── NESTMATE VIEW ── */
+#view-nestmate{overflow:hidden}
+.nm-hd{padding:14px 18px;border-bottom:1px solid var(–border);display:flex;align-items:center;gap:12px;flex-shrink:0;background:rgba(250,248,244,0.02)}
+.nm-back{background:none;border:none;cursor:pointer;padding:4px;display:flex;align-items:center}
+.nm-back svg{width:20px;height:20px;stroke:rgba(250,248,244,0.5);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.nm-ht{font-family:‘Cormorant Garamond’,serif;font-size:18px;font-weight:700;color:var(–chalk)}
+.nm-hs{font-size:11px;color:rgba(250,248,244,0.38);margin-top:1px}
+.nm-body{flex:1;overflow-y:auto;padding:14px 18px 100px;display:flex;flex-direction:column;gap:10px}
+.nm-prompt{background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.18);border-radius:14px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px;flex-shrink:0}
+.nm-prompt svg{width:17px;height:17px;stroke:#a78bfa;fill:none;stroke-width:1.8;stroke-linecap:round;flex-shrink:0;margin-top:1px}
+.nm-prompt-text{font-size:12px;color:rgba(250,248,244,0.5);line-height:1.55}
+.nm-prompt-text strong{color:#a78bfa;font-weight:600}
+.nm-card{background:var(–faint);border:1px solid var(–border);border-radius:18px;padding:16px;display:flex;gap:14px;cursor:pointer;transition:background 0.18s,transform 0.18s}
+.nm-card:hover{background:var(–faint2);transform:translateX(3px)}
+.nm-av{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:white;flex-shrink:0;background:linear-gradient(135deg,#7c3aed,#4c1d95)}
+.nm-info{flex:1;min-width:0}
+.nm-name{font-size:14px;font-weight:700;color:var(–chalk)}
+.nm-status{font-size:11px;color:rgba(250,248,244,0.38);margin-top:2px}
+.nm-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
+.nm-tag{background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.22);border-radius:10px;padding:3px 8px;font-size:10px;font-weight:600;color:#a78bfa}
+.nm-scores{flex-shrink:0;min-width:110px}
+.nm-overall{text-align:right;margin-bottom:6px}
+.nm-overall-val{font-family:‘Cormorant Garamond’,serif;font-size:20px;font-weight:700;color:var(–chalk)}
+.nm-overall-lbl{font-size:9px;color:var(–muted);display:block}
+.nm-dim{display:flex;align-items:center;gap:6px;margin-bottom:3px}
+.nm-dim-lbl{font-size:9px;color:rgba(250,248,244,0.35);width:72px;text-align:right;flex-shrink:0}
+.nm-dim-bar{flex:1;height:3px;background:rgba(250,248,244,0.07);border-radius:2px;overflow:hidden}
+.nm-dim-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,#7c3aed,#a78bfa)}
+.nm-dim-val{font-size:9px;color:rgba(250,248,244,0.4);width:20px;flex-shrink:0}
+
+/* ── SIGN UP VIEW ── */
+#view-signup{overflow-y:auto;background:var(–forest2)}
+.su-wrap{padding:32px 24px 100px;display:flex;flex-direction:column;gap:0}
+.su-logo{font-family:‘Cormorant Garamond’,serif;font-size:28px;font-weight:700;color:var(–chalk);margin-bottom:6px}
+.su-logo span{color:var(–tc)}
+.su-tagline{font-size:13px;color:var(–muted);margin-bottom:28px}
+/* role toggle */
+.su-toggle{display:flex;background:rgba(250,248,244,0.06);border:1px solid rgba(250,248,244,0.08);border-radius:16px;padding:3px;margin-bottom:28px;flex-shrink:0}
+.su-role{flex:1;text-align:center;padding:11px;border-radius:12px;font-size:13px;font-weight:600;color:rgba(250,248,244,0.38);cursor:pointer;transition:all 0.22s;letter-spacing:0.2px}
+.su-role.on{background:var(–tc);color:white;box-shadow:0 4px 16px rgba(196,98,58,0.3)}
+/* form */
+.su-section{display:none;flex-direction:column;gap:14px}
+.su-section.show{display:flex}
+.su-field-group{display:flex;flex-direction:column;gap:6px}
+.su-label{font-size:11px;font-weight:700;color:rgba(250,248,244,0.4);letter-spacing:1px;text-transform:uppercase}
+.su-input{background:rgba(250,248,244,0.06);border:1.5px solid rgba(250,248,244,0.1);border-radius:14px;padding:14px 16px;font-family:‘Outfit’,sans-serif;font-size:14px;color:var(–chalk);outline:none;transition:border-color 0.2s,background 0.2s;width:100%}
+.su-input::placeholder{color:rgba(250,248,244,0.25)}
+.su-input:focus{border-color:rgba(196,98,58,0.5);background:rgba(250,248,244,0.09)}
+.su-select{background:rgba(250,248,244,0.06);border:1.5px solid rgba(250,248,244,0.1);border-radius:14px;padding:14px 16px;font-family:‘Outfit’,sans-serif;font-size:14px;color:rgba(250,248,244,0.7);outline:none;width:100%;cursor:pointer;appearance:none;transition:border-color 0.2s}
+.su-select:focus{border-color:rgba(196,98,58,0.5)}
+.su-select option{background:#1E3028;color:var(–chalk)}
+.su-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+/* preference chips */
+.su-chips{display:flex;flex-wrap:wrap;gap:8px}
+.su-chip{border:1.5px solid rgba(250,248,244,0.1);border-radius:20px;padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer;background:var(–faint);color:rgba(250,248,244,0.5);font-family:‘Outfit’,sans-serif;transition:all 0.16s}
+.su-chip.on{background:var(–tc);color:white;border-color:transparent}
+/* divider */
+.su-divider{display:flex;align-items:center;gap:12px;margin:4px 0}
+.su-divider::before,.su-divider::after{content:’’;flex:1;height:1px;background:rgba(250,248,244,0.08)}
+.su-divider span{font-size:11px;color:rgba(250,248,244,0.25)}
+/* submit */
+.su-submit{background:var(–tc);color:white;border:none;border-radius:16px;padding:16px;font-family:‘Outfit’,sans-serif;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 8px 24px rgba(196,98,58,0.32);transition:background 0.2s,transform 0.15s;width:100%;margin-top:6px;letter-spacing:0.2px}
+.su-submit:hover{background:#d46b41;transform:translateY(-1px)}
+.su-signin{text-align:center;font-size:13px;color:rgba(250,248,244,0.35);margin-top:14px}
+.su-signin a{color:var(–tc);font-weight:600;cursor:pointer;text-decoration:none}
+.su-terms{font-size:11px;color:rgba(250,248,244,0.22);text-align:center;line-height:1.6;margin-top:10px}
+
+/* ── BOTTOM NAV ── */
+.bnav{
+position:absolute;bottom:0;left:0;right:0;z-index:20;
+padding:8px 0 24px;
+display:flex;justify-content:space-around;align-items:center;
+background:linear-gradient(to top,rgba(10,13,11,0.97) 0%,rgba(10,13,11,0.75) 65%,transparent 100%);
+backdrop-filter:blur(24px);
+}
+.ni{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:7px 14px;border-radius:14px;transition:background 0.15s;opacity:0.3}
+.ni:hover{background:rgba(250,248,244,0.04);opacity:0.65}
+.ni.on{opacity:1}
+.ni svg{width:21px;height:21px;stroke:var(–chalk);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ni.on svg{stroke:var(–tc)}
+.ni-lbl{font-size:9px;font-weight:700;color:var(–chalk);letter-spacing:0.3px}
+.ni.on .ni-lbl{color:var(–tc)}
+/* NestMate nav special */
+.ni.nm-nav svg{stroke:rgba(124,58,237,0.6)}
+.ni.nm-nav.on svg{stroke:#a78bfa}
+.ni.nm-nav.on .ni-lbl{color:#a78bfa}
+/* Sign up nav */
+.ni.su-nav svg{stroke:rgba(250,248,244,0.5)}
+.ni.su-nav.on svg{stroke:var(–tc)}
+
+/* ── MATCH OVERLAY ── */
+#mo{position:absolute;inset:0;z-index:100;background:rgba(6,8,6,0.93);backdrop-filter:blur(22px);display:none;flex-direction:column;align-items:center;justify-content:center;cursor:pointer}
+#mo.show{display:flex}
+.mo-inner{text-align:center;animation:moPop 0.5s cubic-bezier(0.34,1.56,0.64,1)}
+@keyframes moPop{from{transform:scale(0.4) translateY(28px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
+.mo-ring{width:170px;height:170px;border-radius:50%;border:1.5px solid rgba(196,98,58,0.28);display:flex;align-items:center;justify-content:center;margin:0 auto 22px;position:relative;animation:spinRing 10s linear infinite}
+@keyframes spinRing{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.mo-ring::before{content:’’;position:absolute;inset:12px;border-radius:50%;border:1px dashed rgba(196,98,58,0.15)}
+.mo-icon{width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,var(–tc),var(–tc2));display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 14px rgba(196,98,58,0.1),0 0 60px rgba(196,98,58,0.22);animation:none}
+.mo-icon svg{width:42px;height:42px;stroke:white;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.mo-eye{font-size:10px;font-weight:700;letter-spacing:3px;color:var(–tc);text-transform:uppercase;margin-bottom:8px}
+.mo-big{font-family:‘Cormorant Garamond’,serif;font-size:44px;font-weight:700;color:var(–chalk);line-height:1;margin-bottom:10px}
+.mo-sub{font-size:13px;color:rgba(250,248,244,0.48);margin-bottom:26px;padding:0 24px;line-height:1.6}
+.mo-btns{display:flex;gap:12px;justify-content:center}
+.mo-ghost{background:var(–faint);color:rgba(250,248,244,0.7);border:1.5px solid var(–border);border-radius:15px;padding:12px 22px;font-family:‘Outfit’,sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:background 0.2s}
+.mo-solid{background:var(–tc);color:white;border:none;border-radius:15px;padding:12px 22px;font-family:‘Outfit’,sans-serif;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 6px 20px rgba(196,98,58,0.36);transition:background 0.2s,transform 0.15s}
+
+@keyframes fuSlide{from{transform:translateY(14px);opacity:0}to{transform:translateY(0);opacity:1}}
+.fu{animation:fuSlide 0.28s cubic-bezier(0.4,0,0.2,1)}
+::-webkit-scrollbar{width:0}
+@media(max-width:430px){body{background:#0D1510}#shell{width:100vw;height:100dvh;border-radius:0;box-shadow:none}}
+</style>
+
+</head>
+<body>
+<div id="shell">
+
+<!-- MATCH OVERLAY -->
+
+<div id="mo">
+  <div class="mo-inner">
+    <div class="mo-ring"><div class="mo-icon"><svg viewBox="0 0 24 24"><path d="M3 9.5C3 7 5 5 7.5 5c1.5 0 2.8.7 3.7 1.8L12 8l.8-.9A5 5 0 0 1 21 9.5c0 5.5-9 10-9 10S3 15 3 9.5z"/></svg></div></div>
+    <div class="mo-eye">Perfect Match</div>
+    <div class="mo-big">Nested!</div>
+    <div class="mo-sub" id="mo-sub">Property saved</div>
+    <div class="mo-btns">
+      <button class="mo-ghost" onclick="closeMatch()">Keep Swiping</button>
+      <button class="mo-solid" onclick="openChatFromMatch()">Message Agent</button>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+
+<div class="header" id="main-header">
+  <div>
+    <div class="logo-word">Swipe<span>Nest</span></div>
+    <div class="logo-sub" id="header-sub">Windhoek · Namibia</div>
+  </div>
+  <div style="display:flex;gap:8px">
+    <button class="hbtn" onclick="showView('filter')">
+      <svg viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+    </button>
+    <button class="hbtn">
+      <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- PILL SELECTOR -->
+
+<div class="pill-selector" id="pill-sel">
+  <div class="pill-track" id="pill-track"></div>
+  <div class="pill-opt on" data-type="leases" onclick="setPillType(this,'leases')">Long-term Leases</div>
+  <div class="pill-opt" data-type="stays" onclick="setPillType(this,'stays')">Short-term Stays</div>
+  <div class="pill-opt" data-type="sales" onclick="setPillType(this,'sales')">Sales</div>
+</div>
+
+<!-- SWIPE VIEW -->
+
+<div class="view" id="view-swipe">
+  <div class="card-stage" id="stage">
+    <div class="stk s3" id="s3"></div>
+    <div class="stk s2" id="s2"></div>
+  </div>
+  <div class="actions" id="act-row">
+    <button class="act undo" onclick="undoSwipe()" title="Undo"><svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.56"/></svg></button>
+    <button class="act skip" onclick="swipe('left')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <button class="act nst" onclick="swipe('right')"><svg viewBox="0 0 24 24"><path d="M3 9.5C3 7 5 5 7.5 5c1.5 0 2.8.7 3.7 1.8L12 8l.8-.9A5 5 0 0 1 21 9.5c0 5.5-9 10-9 10S3 15 3 9.5z"/></svg></button>
+    <button class="act sup" onclick="swipe('right')"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>
+  </div>
+</div>
+
+<!-- DETAIL VIEW -->
+
+<div class="view hidden" id="view-detail">
+  <div class="d-hero" id="d-hero">
+    <div class="d-hero-bg" id="d-bg"></div>
+    <div class="d-hero-ov"></div>
+    <button class="d-back" onclick="showView('swipe')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>Back</button>
+    <div class="d-hero-info">
+      <div class="d-badge-row"><div class="d-type" id="d-type"></div><div id="d-agent-badge"></div></div>
+      <div class="d-title" id="d-title"></div>
+      <div class="d-loc"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span id="d-loc-text"></span></div>
+    </div>
+  </div>
+  <div class="d-body" id="d-body">
+    <div class="d-stats" id="d-stats"></div>
+    <div><div class="sec-lbl">About</div><div class="d-desc" id="d-desc"></div></div>
+    <div><div class="sec-lbl">Features</div><div class="d-tags" id="d-tags"></div></div>
+    <div><div class="sec-lbl">Ratings</div><div class="ratings-row" id="d-ratings"></div></div>
+    <div><div class="sec-lbl">Listed by</div><div class="landlord-card" id="d-landlord"></div></div>
+    <div class="d-price-row">
+      <div class="d-price" id="d-price"></div>
+      <div class="d-btns">
+        <button class="d-skip" onclick="swipe('left')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        <button class="d-nest" onclick="swipe('right')"><svg viewBox="0 0 24 24"><path d="M3 9.5C3 7 5 5 7.5 5c1.5 0 2.8.7 3.7 1.8L12 8l.8-.9A5 5 0 0 1 21 9.5c0 5.5-9 10-9 10S3 15 3 9.5z"/></svg>Nest It</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MATCHES VIEW -->
+
+<div class="view hidden fu" id="view-matches">
+  <div class="m-hd"><div class="m-h">Your Nests</div><div class="m-sub" id="m-sub">0 properties saved</div></div>
+  <div style="overflow-y:auto;padding:0 18px 100px;flex:1" id="m-list"></div>
+</div>
+
+<!-- FILTER VIEW -->
+
+<div class="view hidden fu" id="view-filter">
+  <div class="f-hd"><div class="f-h">Filters</div><button class="f-rst" onclick="resetFilters()">Reset all</button></div>
+  <div style="overflow-y:auto;flex:1;padding:0 18px 100px">
+    <div class="f-sec"><div class="f-lbl">Listing Type</div><div class="f-chips" id="fc-ltype"></div></div>
+    <div class="f-sec"><div class="f-lbl">City</div><div class="f-chips" id="fc-city"></div></div>
+    <div class="f-sec"><div class="f-lbl">Price Range</div><div class="f-chips" id="fc-price"></div></div>
+    <div class="f-sec"><div class="f-lbl">Property Type</div><div class="f-chips" id="fc-type"></div></div>
+    <div class="f-sec"><div class="f-lbl">Agent Tier</div><div class="f-chips" id="fc-tier"></div></div>
+    <button class="btn-p" style="width:100%;margin-top:8px" id="f-apply" onclick="applyFilters()">Show Properties</button>
+  </div>
+</div>
+
+<!-- CHAT VIEW -->
+
+<div class="view hidden" id="view-chat" style="display:none;flex-direction:column;overflow:hidden">
+  <div class="c-hd">
+    <button class="c-back" onclick="showView('matches')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+    <div class="c-av" id="c-av"></div>
+    <div style="flex:1"><div class="c-name" id="c-name"></div><div class="c-prop" id="c-prop"></div></div>
+    <div class="c-online"></div>
+  </div>
+  <div class="c-msgs" id="c-msgs"></div>
+  <div class="c-inp-row">
+    <input class="c-inp" id="c-inp" placeholder="Message agent…" onkeydown="if(event.key==='Enter')sendMsg()"/>
+    <button class="c-send" onclick="sendMsg()"><svg viewBox="0 0 24 24"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></button>
+  </div>
+</div>
+
+<!-- NESTMATE VIEW -->
+
+<div class="view hidden" id="view-nestmate" style="display:none;flex-direction:column;overflow:hidden">
+  <div class="nm-hd">
+    <button class="nm-back" onclick="showView('swipe')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+    <div><div class="nm-ht">NestMate</div><div class="nm-hs" id="nm-hs">Find a verified flatmate</div></div>
+  </div>
+  <div class="nm-body">
+    <div class="nm-prompt">
+      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <div class="nm-prompt-text">Showing verified users open to flatshares. Profiles are rated by <strong>previous landlords and flatmates</strong> across four dimensions.</div>
+    </div>
+    <div id="nm-list"></div>
+  </div>
+</div>
+
+<!-- SIGN UP VIEW -->
+
+<div class="view hidden" id="view-signup" style="display:none;overflow-y:auto">
+  <div class="su-wrap">
+    <div class="su-logo">Swipe<span>Nest</span></div>
+    <div class="su-tagline">Namibia's property platform</div>
+
+```
+<!-- Role Toggle -->
+<div class="su-toggle">
+  <div class="su-role on" id="role-tenant" onclick="setRole('tenant')">I'm Looking</div>
+  <div class="su-role" id="role-agent" onclick="setRole('agent')">I'm Listing</div>
+</div>
+
+<!-- TENANT FORM -->
+<div class="su-section show" id="form-tenant">
+  <div class="su-field-group">
+    <div class="su-label">Full Name</div>
+    <input class="su-input" type="text" placeholder="Your full name"/>
+  </div>
+  <div class="su-row">
+    <div class="su-field-group">
+      <div class="su-label">Email</div>
+      <input class="su-input" type="email" placeholder="email@example.com"/>
+    </div>
+    <div class="su-field-group">
+      <div class="su-label">WhatsApp</div>
+      <input class="su-input" type="tel" placeholder="+264 …"/>
+    </div>
+  </div>
+  <div class="su-field-group">
+    <div class="su-label">Password</div>
+    <input class="su-input" type="password" placeholder="Min. 8 characters"/>
+  </div>
+  <div class="su-field-group">
+    <div class="su-label">City</div>
+    <select class="su-select">
+      <option value="">Select city</option>
+      <option>Windhoek</option><option>Swakopmund</option><option>Walvis Bay</option>
+      <option>Lüderitz</option><option>Oshakati</option>
+    </select>
+  </div>
+  <div class="su-field-group">
+    <div class="su-label">I'm looking for</div>
+    <div class="su-chips">
+      <div class="su-chip on" onclick="this.classList.toggle('on')">Long-term Lease</div>
+      <div class="su-chip" onclick="this.classList.toggle('on')">Short-term Stay</div>
+      <div class="su-chip" onclick="this.classList.toggle('on')">To Buy</div>
+      <div class="su-chip" onclick="this.classList.toggle('on')">NestMate</div>
+    </div>
+  </div>
+  <div class="su-field-group">
+    <div class="su-label">I am a</div>
+    <div class="su-chips">
+      <div class="su-chip on" onclick="toggleChipGroup(this)">Student</div>
+      <div class="su-chip" onclick="toggleChipGroup(this)">Professional</div>
+      <div class="su-chip" onclick="toggleChipGroup(this)">Family</div>
+      <div class="su-chip" onclick="toggleChipGroup(this)">Expat / Corporate</div>
+    </div>
+  </div>
+  <button class="su-submit" onclick="handleSignup('tenant')">Create Account</button>
+  <div class="su-divider"><span>or</span></div>
+  <button class="su-submit" style="background:rgba(250,248,244,0.07);box-shadow:none;border:1.5px solid rgba(250,248,244,0.12)" onclick="handleSignup('tenant')">
+    Continue with Google
+  </button>
+  <div class="su-signin">Already have an account? <a onclick="showView('swipe')">Sign in</a></div>
+  <div class="su-terms">By creating an account you agree to our Terms of Service and Privacy Policy.</div>
+</div>
+
+<!-- AGENT FORM -->
+<div class="su-section" id="form-agent">
+  <div class="su-field-group">
+    <div class="su-label">Full Name</div>
+    <input class="su-input" type="text" placeholder="Your full name"/>
+  </div>
+  <div class="su-field-group">
+    <div class="su-label">Agency / Company Name</div>
+    <input class="su-input" type="text" placeholder="e.g. Seeff Namibia"/>
+  </div>
+  <div class="su-row">
+    <div class="su-field-group">
+      <div class="su-label">Email</div>
+      <input class="su-input" type="email" placeholder="work@agency.com"/>
+    </div>
+    <div class="su-field-group">
+      <div class="su-label">WhatsApp</div>
+      <input class="su-input" type="tel" placeholder="+264 …"/>
+    </div>
+  </div>
+  <div class="su-field-group">
+    <div class="su-label">Password</div>
+    <input class="su-input" type="password" placeholder="Min. 8 characters"/>
+  </div>
+  <div class="su-field-group">
+    <div class="su-label">Primary City</div>
+    <select class="su-select">
+      <option value="">Select city</option>
+      <option>Windhoek</option><option>Swakopmund</option><option>Walvis Bay</option>
+      <option>Lüderitz</option><option>Oshakati</option>
+    </select>
+  </div>
+  <div class="su-field-group">
+    <div class="su-label">I list</div>
+    <div class="su-chips">
+      <div class="su-chip on" onclick="this.classList.toggle('on')">Long-term Leases</div>
+      <div class="su-chip" onclick="this.classList.toggle('on')">Short-term Stays</div>
+      <div class="su-chip" onclick="this.classList.toggle('on')">Sales</div>
+    </div>
+  </div>
+  <div class="su-field-group">
+    <div class="su-label">NamQual / Agency Reg. No. (optional)</div>
+    <input class="su-input" type="text" placeholder="Registration number"/>
+  </div>
+  <button class="su-submit" onclick="handleSignup('agent')">Create Agent Account</button>
+  <div class="su-divider"><span>or</span></div>
+  <button class="su-submit" style="background:rgba(250,248,244,0.07);box-shadow:none;border:1.5px solid rgba(250,248,244,0.12)" onclick="handleSignup('agent')">
+    Continue with Google
+  </button>
+  <div class="su-signin">Already have an account? <a onclick="showView('swipe')">Sign in</a></div>
+  <div class="su-terms">By registering as an agent you agree to our Agent Terms and listing standards.</div>
+</div>
+```
+
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+
+<div class="bnav">
+  <div class="ni on" id="nav-swipe" onclick="showView('swipe')">
+    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <div class="ni-lbl">Discover</div>
+  </div>
+  <div class="ni" id="nav-matches" onclick="showView('matches')">
+    <svg viewBox="0 0 24 24"><path d="M3 9.5C3 7 5 5 7.5 5c1.5 0 2.8.7 3.7 1.8L12 8l.8-.9A5 5 0 0 1 21 9.5c0 5.5-9 10-9 10S3 15 3 9.5z"/></svg>
+    <div class="ni-lbl" id="nav-m-lbl">Nests</div>
+  </div>
+  <div class="ni nm-nav" id="nav-nestmate" onclick="openNestMate()">
+    <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    <div class="ni-lbl">NestMate</div>
+  </div>
+  <div class="ni" id="nav-filter" onclick="showView('filter')">
+    <svg viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+    <div class="ni-lbl">Filters</div>
+  </div>
+  <div class="ni su-nav" id="nav-signup" onclick="showView('signup')">
+    <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <div class="ni-lbl">Sign Up</div>
+  </div>
+</div>
+
+</div><!-- /shell -->
+<script>
+// ── DATA ──
+const BADGE={gold:{cls:'gold',label:'Premier Agency'},emerald:{cls:'emerald',label:'Top Agent'},tc:{cls:'tc',label:'Verified Agent'},silver:{cls:'silver',label:'Private Landlord'}};
+
+const ALL_PROPS=[
+// LONG-TERM LEASES
+{id:1,title:“Modern Studio, Klein Windhoek”,price:6500,priceLabel:“N$6,500/mo”,listingType:“leases”,
+location:“Klein Windhoek, Windhoek”,city:“Windhoek”,beds:1,baths:1,sqm:45,type:“Studio”,
+agent:{name:“Amelia Shikongo”,co:“Seeff Namibia”,avatar:“AS”,resp:“Responds in 1 hr”,badge:“gold”},
+agentRating:4.9,agentReviews:84,propRating:4.7,propReviews:23,
+tags:[“Pet Friendly”,“Furnished”,“Secure Complex”,“Backup Power”],
+desc:“A luminous contemporary studio in the heart of Klein Windhoek. Walking distance to The Grove Mall and boutique restaurants. 24/7 security, inverter backup and fast fibre internet.”,
+gradient:“linear-gradient(155deg,#1a2a3a,#0d1b2a)”},
+{id:2,title:“Spacious Family Home, Khomasdal”,price:12000,priceLabel:“N$12,000/mo”,listingType:“leases”,
+location:“Khomasdal, Windhoek”,city:“Windhoek”,beds:3,baths:2,sqm:140,type:“House”,
+agent:{name:“David Hamutenya”,co:“Harcourts Namibia”,avatar:“DH”,resp:“Responds in 2 hrs”,badge:“emerald”},
+agentRating:4.8,agentReviews:61,propRating:4.6,propReviews:17,
+tags:[“Garden”,“Double Garage”,“Solar Power”,“Borehole”],
+desc:“A generous family home in a well-established neighbourhood. Solar installation ensures uninterrupted power. Borehole feeds the garden. Double garage and garden cottage included.”,
+gradient:“linear-gradient(155deg,#0d2218,#071910)”},
+{id:3,title:“Townhouse, Pioneerspark”,price:8200,priceLabel:“N$8,200/mo”,listingType:“leases”,
+location:“Pioneerspark, Windhoek”,city:“Windhoek”,beds:2,baths:2,sqm:95,type:“Townhouse”,
+agent:{name:“Petrus Nakale”,co:“Independent”,avatar:“PN”,resp:“Responds in 3 hrs”,badge:“tc”},
+agentRating:4.3,agentReviews:28,propRating:4.4,propReviews:12,
+tags:[“Gated Complex”,“Modern Kitchen”,“Courtyard”,“Borehole”],
+desc:“Elegant townhouse in a 24-hour guarded estate. Open-plan living with premium kitchen opens onto a private walled courtyard. Reliable borehole water supply.”,
+gradient:“linear-gradient(155deg,#2a1008,#1c0a04)”},
+{id:4,title:“Sea-View Apartment, Swakopmund”,price:9800,priceLabel:“N$9,800/mo”,listingType:“leases”,
+location:“Swakopmund, Erongo”,city:“Swakopmund”,beds:2,baths:1,sqm:80,type:“Apartment”,
+agent:{name:“Nina Engelbrecht”,co:“Pam Golding”,avatar:“NE”,resp:“Responds in 30 min”,badge:“gold”},
+agentRating:5.0,agentReviews:112,propRating:4.9,propReviews:41,
+tags:[“Ocean View”,“Private Balcony”,“Pool”,“Covered Parking”],
+desc:“Floor-to-ceiling windows frame the Atlantic every morning. Private balcony for sundowners. Communal pool and landscaped garden. A five-minute walk to Swakopmund’s best restaurants.”,
+gradient:“linear-gradient(155deg,#0a1a36,#071228)”},
+// SHORT-TERM STAYS
+{id:5,title:“Executive Suite, Windhoek CBD”,price:1800,priceLabel:“N$1,800/night”,listingType:“stays”,
+location:“CBD, Windhoek”,city:“Windhoek”,beds:1,baths:1,sqm:55,type:“Suite”,
+agent:{name:“Clara Boois”,co:“UrbanStay Namibia”,avatar:“CB”,resp:“Responds in 15 min”,badge:“gold”},
+agentRating:4.8,agentReviews:203,propRating:4.7,propReviews:88,
+tags:[“Fully Serviced”,“Daily Housekeeping”,“WiFi”,“Airport Transfer”],
+desc:“Beautifully appointed executive suite in the heart of Windhoek. Ideal for business travellers on short assignments. Fully serviced with daily housekeeping. Flexible check-in.”,
+gradient:“linear-gradient(155deg,#0c2461,#1e3799)”},
+{id:6,title:“Beach Cottage, Swakopmund”,price:950,priceLabel:“N$950/night”,listingType:“stays”,
+location:“Swakopmund, Erongo”,city:“Swakopmund”,beds:2,baths:1,sqm:65,type:“Cottage”,
+agent:{name:“Nina Engelbrecht”,co:“Pam Golding”,avatar:“NE”,resp:“Responds in 30 min”,badge:“gold”},
+agentRating:5.0,agentReviews:112,propRating:4.9,propReviews:64,
+tags:[“Ocean Walk”,“Fully Equipped”,“Braai”,“Free Parking”],
+desc:“Charming whitewashed cottage two minutes from the beach. Fully equipped kitchen, private braai area and outdoor shower. Perfect for a weekend escape or extended coastal stay.”,
+gradient:“linear-gradient(155deg,#0a2030,#061420)”},
+{id:7,title:“Corporate Apartment, Walvis Bay”,price:1200,priceLabel:“N$1,200/night”,listingType:“stays”,
+location:“Walvis Bay, Erongo”,city:“Walvis Bay”,beds:2,baths:2,sqm:90,type:“Apartment”,
+agent:{name:“Joseph Nghifikwa”,co:“Private”,avatar:“JN”,resp:“Responds in 2 hrs”,badge:“silver”},
+agentRating:4.1,agentReviews:19,propRating:4.3,propReviews:31,
+tags:[“Near Port”,“Fully Furnished”,“Fast WiFi”,“Parking”],
+desc:“Spacious corporate apartment a short drive from the port. Ideal for professionals on extended assignments. Full kitchen, fast wifi, and two dedicated parking bays.”,
+gradient:“linear-gradient(155deg,#1e0818,#14040f)”},
+// SALES
+{id:8,title:“Luxury Penthouse, Eros”,price:4800000,priceLabel:“N$4.8M”,listingType:“sales”,
+location:“Eros, Windhoek”,city:“Windhoek”,beds:4,baths:3,sqm:220,type:“Penthouse”,
+agent:{name:“Sandra Mouton”,co:“Seeff Namibia”,avatar:“SM”,resp:“Responds in 1 hr”,badge:“gold”},
+agentRating:4.9,agentReviews:97,propRating:5.0,propReviews:8,
+tags:[“Rooftop Terrace”,“City Views”,“Smart Home”,“Pool”,“Concierge”],
+desc:“Windhoek’s most elevated address. Fully automated penthouse commanding panoramic city views. Chef’s kitchen, home theatre, rooftop heated pool and dedicated concierge. Once-in-a-generation opportunity.”,
+gradient:“linear-gradient(155deg,#180a2a,#10061c)”},
+{id:9,title:“Family Estate, Ludwigsdorf”,price:4200000,priceLabel:“N$4.2M”,listingType:“sales”,
+location:“Ludwigsdorf, Windhoek”,city:“Windhoek”,beds:4,baths:3,sqm:380,type:“Estate”,
+agent:{name:“Sandra Mouton”,co:“Seeff Namibia”,avatar:“SM”,resp:“Responds in 1 hr”,badge:“gold”},
+agentRating:4.9,agentReviews:97,propRating:5.0,propReviews:6,
+tags:[“Double Plot”,“Pool”,“Staff Quarters”,“Solar”,“Borehole”],
+desc:“Magnificent estate in prestigious Ludwigsdorf. Double plot with mature gardens, heated pool, staff quarters, full solar and borehole. The benchmark for Windhoek residential property.”,
+gradient:“linear-gradient(155deg,#1a2a1a,#0d1a0d)”},
+{id:10,title:“Modern Family Home, Kleine Kuppe”,price:2850000,priceLabel:“N$2.85M”,listingType:“sales”,
+location:“Kleine Kuppe, Windhoek”,city:“Windhoek”,beds:3,baths:2,sqm:210,type:“House”,
+agent:{name:“David Hamutenya”,co:“Harcourts Namibia”,avatar:“DH”,resp:“Responds in 2 hrs”,badge:“emerald”},
+agentRating:4.8,agentReviews:61,propRating:4.8,propReviews:4,
+tags:[“Mountain Views”,“Pool”,“Solar”,“Double Garage”,“Security Estate”],
+desc:“Contemporary family home in a sought-after security estate. Mountain views from the main bedroom, heated pool, solar system and double garage. Immaculate condition, immediate occupation.”,
+gradient:“linear-gradient(155deg,#1a1a2a,#0d0d1c)”},
+];
+
+const NESTMATES=[
+{id:1,name:“Tuli M.”,avatar:“TM”,age:22,status:“UNAM · 2nd Year · Commerce”,tags:[“Early riser”,“Non-smoker”,“Clean”,“Quiet”],overall:4.8,dims:{Payment:4.9,Cleanliness:4.8,Respect:4.7,Comms:4.8},reviews:12},
+{id:2,name:“Keamo S.”,avatar:“KS”,age:24,status:“NUST · Final Year · Engineering”,tags:[“Night owl”,“Social”,“Pet-free”,“Tidy”],overall:4.5,dims:{Payment:4.6,Cleanliness:4.4,Respect:4.6,Comms:4.5},reviews:8},
+{id:3,name:“Fikile N.”,avatar:“FN”,age:23,status:“IUM · 3rd Year · Law”,tags:[“Quiet”,“Non-smoker”,“Cooks”,“Early riser”],overall:4.9,dims:{Payment:5.0,Cleanliness:4.8,Respect:4.9,Comms:4.9},reviews:15},
+{id:4,name:“Andre P.”,avatar:“AP”,age:25,status:“Young Professional · IT”,tags:[“Social”,“Clean”,“WFH”,“No pets”],overall:4.3,dims:{Payment:4.5,Cleanliness:4.2,Respect:4.3,Comms:4.2},reviews:6},
+];
+
+const CITIES=[“All Cities”,“Windhoek”,“Swakopmund”,“Walvis Bay”,“Lüderitz”,“Oshakati”];
+const PRICE_RANGES=[“Any Price”,“Under N$6k”,“N$6k–N$10k”,“N$10k–N$15k”,“N$15k+”,“Under N$1k/night”,“N$1k–N$2k/night”,“N$1M–N$3M”,“N$3M+”];
+const PROP_TYPES=[“Any Type”,“Studio”,“Apartment”,“Townhouse”,“House”,“Cottage”,“Suite”,“Estate”,“Penthouse”];
+const TIERS=[“All Tiers”,“Premier Agency”,“Top Agent”,“Verified Agent”,“Private Landlord”];
+const REPLIES=[“Hi! Thanks for your interest. When would you like to book a viewing?”,“Great timing — this property is still available! Saturday works?”,“Please send me your ID and proof of income and I’ll get the application form to you.”,“Happy to help. Any questions about the property or the area?”,“I can arrange a virtual walkthrough first if that suits you better.”];
+
+// ── STATE ──
+let S={
+activeType:‘leases’,
+idx:0,filtered:[],
+matches:[],history:[],msgs:{},
+chatProp:null,lastMatch:null,
+filters:{city:“All Cities”,price:“Any Price”,type:“Any Type”,tier:“All Tiers”},
+drag:{active:false,startX:0,offsetX:0},
+view:“swipe”
+};
+
+// ── PILL SELECTOR ──
+function setPillType(el, type){
+S.activeType = type;
+document.querySelectorAll(’.pill-opt’).forEach(o=>o.classList.remove(‘on’));
+el.classList.add(‘on’);
+updatePillTrack();
+S.filtered = ALL_PROPS.filter(p=>p.listingType===type);
+S.idx=0;
+if(S.view===‘swipe’||S.view===‘detail’) showView(‘swipe’);
+// update header sub
+const labels={leases:‘Long-term Leases’,stays:‘Short-term Stays’,sales:‘Sales Listings’};
+document.getElementById(‘header-sub’).textContent = labels[type]+’ · Namibia’;
+}
+
+function updatePillTrack(){
+const sel = document.getElementById(‘pill-sel’);
+const opts = sel.querySelectorAll(’.pill-opt’);
+const track = document.getElementById(‘pill-track’);
+let activeIdx = 0;
+opts.forEach((o,i)=>{ if(o.classList.contains(‘on’)) activeIdx=i; });
+const totalW = sel.offsetWidth - 6;
+const optW = totalW / opts.length;
+track.style.width = optW + ‘px’;
+track.style.transform = `translateX(${activeIdx * optW}px)`;
+}
+
+// ── VIEWS ──
+const ALL_VIEWS=[‘swipe’,‘detail’,‘matches’,‘filter’,‘chat’,‘nestmate’,‘signup’];
+function showView(name){
+S.view=name;
+ALL_VIEWS.forEach(v=>{
+const el=document.getElementById(‘view-’+v);
+if(!el)return;
+if(v===name){
+el.classList.remove(‘hidden’);
+if([‘chat’,‘nestmate’,‘signup’].includes(v)) el.style.display=‘flex’;
+} else {
+el.classList.add(‘hidden’);
+if([‘chat’,‘nestmate’,‘signup’].includes(v)) el.style.display=‘none’;
+}
+});
+// pill selector + header visibility
+const hidePill=[‘nestmate’,‘signup’,‘chat’];
+document.getElementById(‘pill-sel’).style.display = hidePill.includes(name)?‘none’:‘flex’;
+document.getElementById(‘main-header’).style.display = name===‘signup’?‘none’:‘flex’;
+// nav highlights
+const navMap={swipe:‘nav-swipe’,matches:‘nav-matches’,nestmate:‘nav-nestmate’,filter:‘nav-filter’,signup:‘nav-signup’};
+document.querySelectorAll(’.ni’).forEach(n=>n.classList.remove(‘on’));
+if(navMap[name]) document.getElementById(navMap[name])?.classList.add(‘on’);
+if(name===‘matches’) renderMatches();
+if(name===‘filter’) buildChips();
+if(name===‘swipe’) renderCard();
+if(name===‘detail’) renderDetail();
+}
+
+// ── CARD ──
+function renderCard(){
+const stage=document.getElementById(‘stage’);
+const actRow=document.getElementById(‘act-row’);
+const old=document.getElementById(‘cc’);if(old)old.remove();
+const emp=stage.querySelector(’.empty’);if(emp)emp.remove();
+const p=S.filtered[S.idx];
+const n1=S.filtered[S.idx+1],n2=S.filtered[S.idx+2];
+document.getElementById(‘s2’).style.background=n1?n1.gradient:‘rgba(30,48,40,0.4)’;
+document.getElementById(‘s3’).style.background=n2?n2.gradient:‘rgba(19,31,26,0.3)’;
+if(!p){
+actRow.style.visibility=‘hidden’;
+const e=document.createElement(‘div’);e.className=‘empty’;
+e.innerHTML=`<svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> <div class="empty-h">All caught up</div><div class="empty-p">No more listings.<br>Adjust filters or switch category.</div> <button class="btn-p" onclick="resetAll()">Start Over</button>`;
+stage.appendChild(e);return;
+}
+actRow.style.visibility=‘visible’;
+const bd=BADGE[p.agent.badge]||BADGE.silver;
+const typeLabels={leases:‘Long-term Lease’,stays:‘Short-term Stay’,sales:‘For Sale’};
+const typeCls={leases:‘leases’,stays:‘stays’,sales:‘sales’};
+const card=document.createElement(‘div’);
+card.className=‘prop-card’;card.id=‘cc’;
+card.innerHTML=` <div class="card-bg" style="background:${p.gradient}"></div> <div class="card-vignette"></div> <div class="photo-dots"><div class="pdot a"></div><div class="pdot"></div><div class="pdot"></div></div> <div class="card-agent-badge ${bd.cls}"><div class="badge-dot"></div>${bd.label}</div> <div class="stamp sn" id="stn">NEST ✓</div> <div class="stamp sp" id="stp">PASS ✗</div> <div class="card-info"> <div class="card-type-row"> <div class="card-type ${typeCls[p.listingType]}">${typeLabels[p.listingType]}</div> <div class="card-rating"> ${starsSVG(p.propRating,10)} <div class="rating-num">${p.propRating.toFixed(1)}</div> <div class="rating-count">(${p.propReviews})</div> </div> </div> <div class="card-title">${p.title}</div> <div class="card-loc"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${p.location}</div> <div class="tags-row">${p.tags.slice(0,3).map(t=>`<span class="tag">${t}</span>`).join('')}</div> <div class="card-bottom-row"> <div class="card-price">${p.priceLabel}</div> <div class="card-chips"> <div class="chip-stat"><svg viewBox="0 0 24 24"><path d="M2 4h20v16H2zM8 4v16M16 4v16"/></svg>${p.beds}bd</div> <div class="chip-stat"><svg viewBox="0 0 24 24"><path d="M4 12h16M4 12a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4M4 12v6h16v-6"/></svg>${p.baths}ba</div> <div class="chip-stat"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>${p.sqm}m²</div> </div> </div> <button class="view-more-btn" onclick="showView('detail')">View full listing<svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button> </div>`;
+stage.appendChild(card);
+setupDrag(card,p);
+}
+
+function starsSVG(rating,size=10){
+let h=’’;
+for(let i=1;i<=5;i++){
+const f=rating>=i?1:rating>=i-0.5?0.5:0;
+h+=`<svg width="${size}" height="${size}" viewBox="0 0 24 24"> <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="${f>0?'#D4A843':'rgba(250,248,244,0.15)'}"/> </svg>`;
+}
+return h;
+}
+
+// ── DRAG ──
+function setupDrag(card,prop){
+const onS=e=>{if(e.target.closest(’.view-more-btn’))return;S.drag.active=true;S.drag.startX=e.touches?e.touches[0].clientX:e.clientX;card.style.transition=‘none’};
+const onM=e=>{
+if(!S.drag.active)return;
+const x=e.touches?e.touches[0].clientX:e.clientX;
+S.drag.offsetX=x-S.drag.startX;
+const rot=S.drag.offsetX*0.042,lift=Math.abs(S.drag.offsetX)*0.018;
+card.style.transform=`translateX(${S.drag.offsetX}px) rotate(${rot}deg) translateY(-${lift}px)`;
+const sn=document.getElementById(‘stn’),sp=document.getElementById(‘stp’);
+const t=S.drag.offsetX/90;
+if(S.drag.offsetX>45){sn.classList.add(‘vis’);sp.classList.remove(‘vis’);sn.style.opacity=Math.min(t,1);}
+else if(S.drag.offsetX<-45){sp.classList.add(‘vis’);sn.classList.remove(‘vis’);sp.style.opacity=Math.min(-t,1);}
+else{sn.classList.remove(‘vis’);sp.classList.remove(‘vis’);}
+};
+const onE=()=>{
+if(!S.drag.active)return;S.drag.active=false;
+if(S.drag.offsetX>95)doSwipe(‘right’,card,prop);
+else if(S.drag.offsetX<-95)doSwipe(‘left’,card,prop);
+else{card.style.transition=‘transform 0.42s cubic-bezier(0.34,1.56,0.64,1)’;card.style.transform=’’;document.getElementById(‘stn’)?.classList.remove(‘vis’);document.getElementById(‘stp’)?.classList.remove(‘vis’);}
+S.drag.offsetX=0;
+};
+card.addEventListener(‘mousedown’,onS);
+window.addEventListener(‘mousemove’,onM);
+window.addEventListener(‘mouseup’,onE);
+card.addEventListener(‘touchstart’,onS,{passive:true});
+card.addEventListener(‘touchmove’,onM,{passive:true});
+card.addEventListener(‘touchend’,onE);
+}
+
+function swipe(dir){const c=document.getElementById(‘cc’);if(!c)return;doSwipe(dir,c,S.filtered[S.idx]);}
+function doSwipe(dir,card,prop){
+card.classList.add(dir===‘right’?‘out-r’:‘out-l’);
+S.history.push({prop,dir});
+if(dir===‘right’&&prop){if(!S.matches.find(m=>m.id===prop.id))S.matches.push(prop);S.lastMatch=prop;setTimeout(()=>showMatchOverlay(prop),260);}
+setTimeout(()=>{S.idx++;if(S.view===‘swipe’)renderCard();else if(S.view===‘detail’)showView(‘swipe’);},460);
+}
+function undoSwipe(){
+if(!S.history.length)return;
+const last=S.history.pop();
+if(last.dir===‘right’)S.matches=S.matches.filter(m=>m.id!==last.prop.id);
+S.idx=Math.max(0,S.idx-1);renderCard();updateMatchNav();
+}
+function resetAll(){
+S.idx=0;S.filtered=ALL_PROPS.filter(p=>p.listingType===S.activeType);
+S.filters={city:“All Cities”,price:“Any Price”,type:“Any Type”,tier:“All Tiers”};renderCard();
+}
+
+// ── DETAIL ──
+function renderDetail(){
+const p=S.filtered[S.idx];if(!p)return;
+document.getElementById(‘d-bg’).style.background=p.gradient;
+const typeLabels={leases:‘Long-term Lease’,stays:‘Short-term Stay’,sales:‘For Sale’};
+const typeCls={leases:‘leases’,stays:‘stays’,sales:‘sales’};
+const dt=document.getElementById(‘d-type’);
+dt.textContent=typeLabels[p.listingType]||p.type;
+dt.className=‘d-type ‘+(typeCls[p.listingType]||’’);
+const bd=BADGE[p.agent.badge]||BADGE.silver;
+document.getElementById(‘d-agent-badge’).innerHTML=`<div class="d-agent-badge ${bd.cls}"><div class="badge-dot" style="width:6px;height:6px;border-radius:50%;background:currentColor;margin-right:2px"></div>${bd.label}</div>`;
+document.getElementById(‘d-title’).textContent=p.title;
+document.getElementById(‘d-loc-text’).textContent=p.location;
+document.getElementById(‘d-stats’).innerHTML=[
+{svg:’<path d="M2 4h20v16H2zM8 4v16M16 4v16"/>’,v:p.beds+(p.beds>1?’ Beds’:’ Bed’),l:‘Bedrooms’},
+{svg:’<path d="M4 12h16M4 12a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4M4 12v6h16v-6"/>’,v:p.baths+(p.baths>1?’ Baths’:’ Bath’),l:‘Bathrooms’},
+{svg:’<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>’,v:p.sqm+‘m²’,l:‘Floor Area’},
+].map(s=>`<div class="d-stat"><svg viewBox="0 0 24 24">${s.svg}</svg><div class="d-stat-v">${s.v}</div><div class="d-stat-l">${s.l}</div></div>`).join(’’);
+document.getElementById(‘d-desc’).textContent=p.desc;
+document.getElementById(‘d-tags’).innerHTML=p.tags.map(t=>`<span class="d-tag">${t}</span>`).join(’’);
+document.getElementById(‘d-ratings’).innerHTML=` <div class="rating-card"><div class="rating-card-big">${p.propRating.toFixed(1)}</div><div class="rating-card-stars">${starsSVG(p.propRating,12)}</div><div class="rating-card-lbl">Property · ${p.propReviews} reviews</div></div> <div class="rating-card"><div class="rating-card-big">${p.agentRating.toFixed(1)}</div><div class="rating-card-stars">${starsSVG(p.agentRating,12)}</div><div class="rating-card-lbl">Agent · ${p.agentReviews} reviews</div></div>`;
+document.getElementById(‘d-landlord’).innerHTML=` <div class="av">${p.agent.avatar}</div> <div style="flex:1"><div class="ll-name">${p.agent.name}</div><div style="font-size:11px;color:var(--muted);margin-top:1px">${p.agent.co}</div> <div class="ll-resp"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${p.agent.resp}</div></div> <div class="ll-verified"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Verified</div>`;
+document.getElementById(‘d-price’).innerHTML=`${p.priceLabel}`;
+// NestMate CTA for leases above 6k
+const body=document.getElementById(‘d-body’);
+const oldCta=document.getElementById(‘nm-d-cta’);if(oldCta)oldCta.remove();
+if(p.listingType===‘leases’&&p.price>=6000){
+const div=document.createElement(‘div’);div.id=‘nm-d-cta’;div.className=‘nm-cta-card’;
+div.onclick=()=>openNestMate(p.title);
+div.innerHTML=`<div><div class="nm-cta-label">Cannot afford it alone?</div><div class="nm-cta-sub">Find a verified NestMate to split the cost</div></div><div class="nm-cta-btn">Find NestMate →</div>`;
+body.insertBefore(div,body.children[body.children.length-1]);
+}
+}
+
+// ── MATCH OVERLAY ──
+function showMatchOverlay(p){
+document.getElementById(‘mo-sub’).innerHTML=`<strong style="color:var(--chalk)">${p.title}</strong><br>saved to your Nests`;
+document.getElementById(‘mo’).classList.add(‘show’);updateMatchNav();
+}
+function closeMatch(){document.getElementById(‘mo’).classList.remove(‘show’);}
+function openChatFromMatch(){document.getElementById(‘mo’).classList.remove(‘show’);if(S.lastMatch)openChat(S.lastMatch);}
+function updateMatchNav(){const n=S.matches.length;document.getElementById(‘nav-m-lbl’).textContent=n>0?`Nests (${n})`:‘Nests’;}
+
+// ── MATCHES ──
+function renderMatches(){
+const list=document.getElementById(‘m-list’);
+const n=S.matches.length;
+document.getElementById(‘m-sub’).textContent=n+’ propert’+(n!==1?‘ies’:‘y’)+’ saved’;
+if(!n){list.innerHTML=`<div class="empty" style="padding-top:40px"><svg viewBox="0 0 24 24"><path d="M3 9.5C3 7 5 5 7.5 5c1.5 0 2.8.7 3.7 1.8L12 8l.8-.9A5 5 0 0 1 21 9.5c0 5.5-9 10-9 10S3 15 3 9.5z"/></svg><div class="empty-h">No nests yet</div><div class="empty-p">Swipe right on listings you love</div></div>`;return;}
+list.innerHTML=S.matches.map(m=>{
+const bd=BADGE[m.agent.badge]||BADGE.silver;
+return`<div class="mc" onclick="openChat(ALL_PROPS.find(p=>p.id===${m.id}))"> <div class="mc-hero"><div class="mc-hero-bg" style="background:${m.gradient}"></div><div class="mc-hero-ov"></div> <div class="mc-badge"><div class="card-agent-badge ${bd.cls}" style="position:relative;top:0;right:0"><div class="badge-dot"></div>${bd.label}</div></div> <div class="mc-rating"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="#D4A843"/></svg><span>${m.propRating.toFixed(1)}</span></div></div> <div class="mc-body"> <div><div class="mc-name">${m.title}</div><div class="mc-loc"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${m.location}</div></div> <div class="mc-r"><div class="mc-price">${m.priceLabel}</div><div class="mc-cta">Message<svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div></div> </div></div>`;}).join(’’);
+}
+
+// ── FILTERS ──
+function buildChips(){
+// listing type in filter
+[[‘fc-ltype’,[‘Long-term Leases’,‘Short-term Stays’,‘Sales Listings’],‘ltype’],
+[‘fc-city’,CITIES,‘city’],[‘fc-price’,PRICE_RANGES,‘price’],
+[‘fc-type’,PROP_TYPES,‘type’],[‘fc-tier’,TIERS,‘tier’]
+].forEach(([id,opts,key])=>{
+const el=document.getElementById(id);if(!el)return;
+el.innerHTML=opts.map(o=>`<button class="fchip ${(S.filters[key]||'')===(o)?'on':''}" onclick="setFilter('${key}','${encodeURIComponent(o)}')">${o}</button>`).join(’’);
+});
+updateApplyBtn();
+}
+function setFilter(k,v){if(k===‘ltype’){const map={‘Long-term Leases’:‘leases’,‘Short-term Stays’:‘stays’,‘Sales Listings’:‘sales’};S.activeType=map[decodeURIComponent(v)]||S.activeType;}else{S.filters[k]=decodeURIComponent(v);}buildChips();}
+function resetFilters(){S.filters={city:“All Cities”,price:“Any Price”,type:“Any Type”,tier:“All Tiers”};buildChips();}
+function filterLogic(){
+return ALL_PROPS.filter(p=>{
+if(p.listingType!==S.activeType)return false;
+const f=S.filters;
+if(f.city!==“All Cities”&&p.city!==f.city)return false;
+if(f.type!==“Any Type”&&p.type!==f.type)return false;
+if(f.tier!==“All Tiers”){const bd=BADGE[p.agent.badge];if(!bd||bd.label!==f.tier)return false;}
+return true;
+});
+}
+function updateApplyBtn(){const n=filterLogic().length;const btn=document.getElementById(‘f-apply’);if(btn)btn.textContent=`Show ${n} Propert${n!==1?'ies':'y'}`;}
+function applyFilters(){S.filtered=filterLogic();S.idx=0;showView(‘swipe’);}
+
+// ── CHAT ──
+function openChat(p){
+if(!p)return;S.chatProp=p;
+document.getElementById(‘c-av’).textContent=p.agent.avatar;
+document.getElementById(‘c-name’).textContent=p.agent.name;
+document.getElementById(‘c-prop’).textContent=p.title;
+renderMsgs(p);showView(‘chat’);
+}
+function renderMsgs(p){
+const msgs=S.msgs[p.id]||[];
+const el=document.getElementById(‘c-msgs’);
+el.innerHTML=`<div class="c-sep">Today</div> <div class="bw-t"><div class="bub t">Hi! Thanks for your interest. Feel free to ask anything about this property 😊</div><div class="bub-time">10:30 AM</div></div>`+
+msgs.map(m=>`<div class="bw-${m.from==='me'?'m':'t'}"><div class="bub ${m.from==='me'?'m':'t'}">${m.text}</div><div class="bub-time">${m.time}</div></div>`).join(’’);
+el.scrollTop=el.scrollHeight;
+}
+function sendMsg(){
+const inp=document.getElementById(‘c-inp’),text=inp.value.trim();
+if(!text||!S.chatProp)return;
+const p=S.chatProp;if(!S.msgs[p.id])S.msgs[p.id]=[];
+const t=new Date().toLocaleTimeString([],{hour:‘2-digit’,minute:‘2-digit’});
+S.msgs[p.id].push({from:‘me’,text,time:t});inp.value=’’;renderMsgs(p);
+const el=document.getElementById(‘c-msgs’);
+const ti=document.createElement(‘div’);ti.className=‘bw-t’;ti.id=‘ti’;
+ti.innerHTML=`<div class="bub t"><div class="typing-bub"><div class="tdot"></div><div class="tdot"></div><div class="tdot"></div></div></div>`;
+el.appendChild(ti);el.scrollTop=el.scrollHeight;
+setTimeout(()=>{
+document.getElementById(‘ti’)?.remove();
+const r=REPLIES[Math.floor(Math.random()*REPLIES.length)];
+const rt=new Date().toLocaleTimeString([],{hour:‘2-digit’,minute:‘2-digit’});
+S.msgs[p.id].push({from:‘them’,text:r,time:rt});renderMsgs(p);
+},1400);
+}
+
+// ── NESTMATE ──
+function openNestMate(listingTitle){
+document.getElementById(‘nm-hs’).textContent = listingTitle ? ‘For: ‘+listingTitle : ‘Find a verified flatmate’;
+renderNestMates();
+showView(‘nestmate’);
+}
+function renderNestMates(){
+document.getElementById(‘nm-list’).innerHTML=NESTMATES.map(nm=>` <div class="nm-card"> <div class="nm-av">${nm.avatar}</div> <div class="nm-info"> <div class="nm-name">${nm.name}, ${nm.age}</div> <div class="nm-status">${nm.status}</div> <div class="nm-tags">${nm.tags.map(t=>`<span class="nm-tag">${t}</span>`).join('')}</div> </div> <div class="nm-scores"> <div class="nm-overall"><div class="nm-overall-val">${nm.overall.toFixed(1)}</div><span class="nm-overall-lbl">${nm.reviews} reviews</span></div> ${Object.entries(nm.dims).map(([k,v])=>`
+<div class="nm-dim">
+<div class="nm-dim-lbl">${k}</div>
+<div class="nm-dim-bar"><div class="nm-dim-fill" style="width:${v/5*100}%"></div></div>
+<div class="nm-dim-val">${v.toFixed(1)}</div>
+</div>`).join('')} </div> </div>`).join(’’);
+}
+
+// ── SIGN UP ──
+function setRole(role){
+document.getElementById(‘role-tenant’).classList.toggle(‘on’,role===‘tenant’);
+document.getElementById(‘role-agent’).classList.toggle(‘on’,role===‘agent’);
+document.getElementById(‘form-tenant’).classList.toggle(‘show’,role===‘tenant’);
+document.getElementById(‘form-agent’).classList.toggle(‘show’,role===‘agent’);
+}
+function toggleChipGroup(el){
+el.closest(’.su-chips’).querySelectorAll(’.su-chip’).forEach(c=>c.classList.remove(‘on’));
+el.classList.add(‘on’);
+}
+function handleSignup(role){
+showView(‘swipe’);
+}
+
+// ── PILL TRACK INIT ──
+window.addEventListener(‘resize’,updatePillTrack);
+
+// ── BOOT ──
+S.filtered = ALL_PROPS.filter(p=>p.listingType===‘leases’);
+showView(‘swipe’);
+setTimeout(updatePillTrack, 50);
+</script>
+
+</body>
+</html>
