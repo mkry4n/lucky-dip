@@ -9,6 +9,7 @@
 <style>
 /* ── RESET ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+a{color:inherit;text-decoration:none;-webkit-text-fill-color:inherit;}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;background:#FAF8F4;color:#110E0C;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 
@@ -34,15 +35,17 @@ border-bottom:1px solid var(–border);
 }
 .nav-logo{
 font-family:Georgia,‘Times New Roman’,serif;
-font-size:24px;font-weight:700;color:var(–ink);text-decoration:none;letter-spacing:-0.3px;
+font-size:24px;font-weight:700;color:#110E0C!important;text-decoration:none!important;letter-spacing:-0.3px;
+-webkit-text-fill-color:#110E0C;
 }
 .nav-logo span{color:var(–tc)}
 .nav-cta{
-background:var(–ink);color:var(–chalk);
+background:#110E0C!important;color:#FAF8F4!important;
 border:none;border-radius:10px;padding:10px 20px;
-font-size:14px;font-weight:600;cursor:pointer;text-decoration:none;
+font-size:14px;font-weight:600;cursor:pointer;text-decoration:none!important;
 -webkit-transition:background 0.2s;transition:background 0.2s;
 display:inline-block;
+-webkit-text-fill-color:#FAF8F4;
 }
 .nav-cta:hover{background:var(–tc)}
 .nav-links{display:flex;align-items:center;gap:24px}
@@ -151,14 +154,15 @@ transition:background 0.2s,transform 0.18s;
 }
 .btn-solid:hover{background:#d46b41;-webkit-transform:translateY(-2px);transform:translateY(-2px)}
 .btn-ghost{
-background:rgba(250,248,244,0.08);
-color:rgba(250,248,244,0.72);
-border:1.5px solid rgba(250,248,244,0.15);
+background:rgba(250,248,244,0.12);
+color:#FAF8F4!important;
+border:1.5px solid rgba(250,248,244,0.3);
 border-radius:14px;padding:16px 26px;
 font-size:15px;font-weight:500;
 cursor:pointer;text-decoration:none;
 display:-webkit-inline-flex;display:inline-flex;
 -webkit-align-items:center;align-items:center;gap:8px;
+-webkit-text-fill-color:#FAF8F4;
 }
 
 /* phone mockup */
@@ -385,28 +389,29 @@ box-shadow:0 6px 24px rgba(196,98,58,0.35);
 .contact-section{
 background:#F0ECE5;
 border-top:1px solid #E8E2DA;
-padding:52px 5%;
+padding:48px 5%;
 display:-webkit-flex;display:flex;
 -webkit-flex-direction:column;flex-direction:column;
 gap:24px;
 }
-@media(min-width:640px){.contact-section{-webkit-flex-direction:row;flex-direction:row;-webkit-align-items:center;align-items:center;-webkit-justify-content:space-between;justify-content:space-between}}
 .contact-h{font-family:Georgia,serif;font-size:24px;font-weight:700;color:#110E0C;margin-bottom:5px}
 .contact-sub{font-size:13px;color:#8A8278;line-height:1.6}
-.contact-btns{display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;gap:10px}
-@media(min-width:400px){.contact-btns{-webkit-flex-direction:row;flex-direction:row}}
+.contact-btns{display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;gap:10px;width:100%;}
 .cbtn{
-display:-webkit-inline-flex;display:inline-flex;
+display:-webkit-flex;display:flex;
 -webkit-align-items:center;align-items:center;
-gap:8px;border-radius:12px;padding:13px 20px;
+gap:8px;border-radius:12px;padding:13px 16px;
 font-size:14px;font-weight:600;
-cursor:pointer;text-decoration:none;
+cursor:pointer;text-decoration:none!important;
 -webkit-transition:transform 0.18s;transition:transform 0.18s;
 white-space:nowrap;
+color:white!important;-webkit-text-fill-color:white;
+width:100%;
+-webkit-justify-content:center;justify-content:center;
 }
 .cbtn:hover{-webkit-transform:translateY(-1px);transform:translateY(-1px)}
-.cbtn.wa{background:#25D366;color:white;box-shadow:0 4px 14px rgba(37,211,102,0.25)}
-.cbtn.ph{background:#110E0C;color:#FAF8F4}
+.cbtn.wa{background:#25D366;color:white!important;-webkit-text-fill-color:white;box-shadow:0 4px 14px rgba(37,211,102,0.25)}
+.cbtn.ph{background:#110E0C;color:#FAF8F4!important;-webkit-text-fill-color:#FAF8F4;}
 
 /* ── FOOTER ── */
 footer{
@@ -417,7 +422,7 @@ display:-webkit-flex;display:flex;
 -webkit-justify-content:space-between;justify-content:space-between;
 flex-wrap:wrap;gap:10px;
 }
-.f-logo{font-family:Georgia,serif;font-size:20px;font-weight:700;color:#FAF8F4;text-decoration:none}
+.f-logo{font-family:Georgia,serif;font-size:20px;font-weight:700;color:#FAF8F4!important;text-decoration:none!important;-webkit-text-fill-color:#FAF8F4;}
 .f-logo span{color:#C4623A}
 footer p{font-size:11px;color:rgba(250,248,244,0.25)}
 
@@ -677,10 +682,10 @@ footer p{font-size:11px;color:rgba(250,248,244,0.25)}
   </div>
   <div class="contact-btns">
     <a class="cbtn wa" href="https://wa.me/264818587203" target="_blank">
-      <span style="font-size:16px">📱</span> WhatsApp +264 81 858 7203
+      WhatsApp +264 81 858 7203
     </a>
     <a class="cbtn ph" href="tel:+264812710474">
-      <span style="font-size:15px">📞</span> +264 81 271 0474
+      +264 81 271 0474
     </a>
   </div>
 </div>
